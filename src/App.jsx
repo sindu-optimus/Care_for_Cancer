@@ -1,0 +1,45 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/auth/Login";
+import Layout from "./components/Layout";
+import SearchPatient from "./pages/SearchPatient";
+import PatientDetails from "./pages/PatientDetails";
+import ReferralDetails from "./pages/ReferralDetails";
+import Dashboard from "./pages/Dashboard";
+import MDTList from "./pages/admin/MDTList";
+import Clinician from "./pages/admin/Clinician";
+import Mapping from "./pages/admin/Mapping";
+import Meetings from "./pages/mdt/Meetings";
+import Reports from "./pages/Reports";
+import Tracking from "./pages/Tracking";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Login has no sidebar */}
+        <Route path="/" element={<Login />} />
+
+        {/* All these pages share the Layout (sidebar + header) */}
+        <Route element={<Layout />}>
+          <Route path="/search-patient" element={<SearchPatient />} />
+          <Route path="/search-patient" element={<SearchPatient />} />
+          <Route
+            path="/search-patient/:id"
+            element={<PatientDetails />}
+          />
+          <Route
+            path="/search-patient/:patientId/referrals/:referralId"
+            element={<ReferralDetails />}
+          />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin/mdtList" element={<MDTList />} />
+          <Route path="/admin/clinician" element={<Clinician />} />
+          <Route path="/admin/mapping" element={<Mapping />} />
+          <Route path="/mdt/meetings" element={<Meetings />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/tracking" element={<Tracking />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
