@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import Table from "../components/ui/Table";
+import Table from "../../components/ui/Table";
 
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -45,14 +45,14 @@ export default function PatientDetails() {
 
   if (!patient) {
     return (
-      <div className="p-10">
+      <div className="p-4 sm:p-6 lg:p-10">
         Patient not found.
       </div>
     );
   }
 
   return (
-    <main className="flex-1 p-10">
+    <main className="flex-1">
         <div
             className="flex items-center gap-2 mb-6 cursor-pointer text-primary font-medium"
             onClick={() => navigate(-1)}
@@ -61,7 +61,7 @@ export default function PatientDetails() {
             <span>Back to Search Patient</span>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-md p-6">
+        <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
             {/* <div
                 className="flex items-center gap-2 mb-6 cursor-pointer text-primary font-medium"
                 onClick={() => navigate(-1)}
@@ -69,11 +69,11 @@ export default function PatientDetails() {
                 <FaArrowLeft />
                 <span>Back to NHS / MRN Search</span>
             </div> */}
-            <h2 className="font-heading font-bold text-xl text-text mb-5">
+            <h2 className="font-heading font-bold text-xl text-text mb-6">
                 Patient Details
             </h2>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 wrap-break-word">
                 <div>
                     <strong>Surname:</strong>{" "}
                     {patient.demographics?.surname || "-"}
@@ -109,8 +109,8 @@ export default function PatientDetails() {
                 </div>
             </div>
         </div>
-        <div className="bg-white mt-10 rounded-2xl shadow-md overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+        <div className="bg-white mt-6 sm:mt-10 rounded-2xl shadow-md overflow-hidden">
+            <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                 <h2 className="font-heading font-bold text-xl text-text">
                     Referrals
                 </h2>

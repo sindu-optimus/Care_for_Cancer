@@ -194,13 +194,13 @@ export default function MappingList() {
   ];
 
   return (
-    <div className="flex-1 p-10 overflow-auto">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="font-heading font-bold text-3xl text-slate-900">
+    <div className="flex-1 overflow-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h2 className="font-heading font-bold text-2xl sm:text-3xl text-slate-900">
           Mapping List
         </h2>
         <Button
-          className="px-6"
+          className="w-full sm:w-auto px-6"
           onClick={() => { setEditingRow(null); resetForm(); setShowModal(true); }}
         >
           Create Mapping
@@ -229,9 +229,9 @@ export default function MappingList() {
           onClose={handleCloseModal}
           size="lg"
         >
-          <div className="space-y-6">
+          <div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
               {/* Clinician */}
               <div>
@@ -273,7 +273,8 @@ export default function MappingList() {
             {values.clinicianId && values.mdtIds.length > 0 && (
               <div>
                 <h3 className="text-base font-semibold text-slate-700 mb-3">Preview</h3>
-                <table className="w-full text-sm border rounded-lg overflow-hidden">
+                <div className="overflow-x-auto">
+                <table className="w-full min-w-[520px] text-sm border rounded-lg overflow-hidden">
                   <thead className="bg-slate-100">
                     <tr>
                       <th className="border border-gray-300 p-2 text-left font-semibold text-slate-600">Clinician</th>
@@ -294,6 +295,7 @@ export default function MappingList() {
                     </tr>
                   </tbody>
                 </table>
+                </div>
               </div>
             )}
 
@@ -304,7 +306,7 @@ export default function MappingList() {
             )}
 
             <div className="flex justify-end">
-              <Button className="px-6" onClick={handleSave} disabled={saving}>
+              <Button className="w-full sm:w-auto px-6" onClick={handleSave} disabled={saving}>
                 {saving ? "Saving..." : editingRow ? "Update Mapping" : "Create Mapping"}
               </Button>
             </div>

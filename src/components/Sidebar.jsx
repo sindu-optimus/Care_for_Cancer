@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-import { MdOutlineTrackChanges, MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
+import { MdOutlineTrackChanges, MdKeyboardArrowRight, MdKeyboardArrowDown, MdClose } from "react-icons/md";
 import { FaRegUser, FaSearch, FaSignOutAlt, FaRegCalendarAlt, FaRegQuestionCircle, FaUserMd, FaHandshake, } from "react-icons/fa";
 import { HiOutlineDocumentReport, HiOutlineClipboard } from "react-icons/hi";
 import { RiListCheck2 } from "react-icons/ri";
@@ -12,7 +12,7 @@ import { FiMap } from "react-icons/fi";
 import logo from "../assets/optimus-logo.png";
 
 const menuItems = [
-  { icon: FaSearch, label: "Search Patient", path: "/search-patient" },
+  { icon: FaSearch, label: "Search Patient", path: "/patient/search-patient" },
   { icon: BsGrid, label: "Dashboard", path: "/dashboard" },
   {
     icon: FaRegCalendarAlt,
@@ -34,7 +34,7 @@ const menuItems = [
   { icon: FaRegQuestionCircle,     label: "Help",       path: "/help" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen = false, onClose }) {
   const [openItems, setOpenItems] = useState(() => {
   const stored = localStorage.getItem("sidebarOpenItems");
     return stored ? JSON.parse(stored) : {};
@@ -45,7 +45,10 @@ export default function Sidebar() {
 
   const handleSignOut = () => {
     // Clear any auth tokens/session here if needed
-    // localStorage.removeItem("token");
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("sidebarOpenItems");
+    localStorage.removeItem("user");
     logout(); 
     navigate("/");
   };
@@ -59,11 +62,30 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-64 relative bg-white border-r border-gray-300 flex flex-col">
+    <>
+    <div
+      className={`fixed inset-0 z-40 bg-black/40 transition-opacity lg:hidden ${
+        isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+      }`}
+      onClick={onClose}
+    />
+    <aside
+      className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white border-r border-gray-300 flex flex-col transition-transform duration-200 lg:static lg:z-auto lg:w-64 lg:max-w-none lg:translate-x-0 ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      }`}
+    >
       <div className="h-20 flex items-center px-8 border-b border-gray-300">
         <div className="absolute top-2 left-4">
           <img src={logo} alt="Optimus-logo" className="h-14 w-auto" />
         </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="lg:hidden ml-auto inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"
+          aria-label="Close navigation"
+        >
+          <MdClose size={24} />
+        </button>
       </div>
 
       <div className="flex-1 px-3 pt-4 overflow-y-auto">
@@ -91,6 +113,7 @@ export default function Sidebar() {
               ) : (
                 <NavLink
                   to={item.path}
+                  onClick={onClose}
                   className={({ isActive }) =>
                     `flex items-center justify-between px-4 py-3 cursor-pointer
                     ${isActive
@@ -113,6 +136,7 @@ export default function Sidebar() {
                     <NavLink
                       key={sub.label}
                       to={sub.path}
+                      onClick={onClose}
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-4 py-3 text-md cursor-pointer rounded-lg ml-2
                         ${isActive
@@ -141,6 +165,7 @@ export default function Sidebar() {
           Sign Out
         </button>
       </div>
-    </div>
+    </aside>
+    </>
   );
 }

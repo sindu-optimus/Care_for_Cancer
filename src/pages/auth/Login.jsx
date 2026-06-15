@@ -26,13 +26,13 @@ export default function Login() {
   const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [apiError, setApiError]         = useState("");  // ← add
-  const [loading, setLoading]           = useState(false); // ← add
+  const [apiError, setApiError]         = useState("");  
+  const [loading, setLoading]           = useState(false); 
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
     useForm({ username: "", password: "" }, validate);
 
-  const onSubmit = async (formValues) => {  // ← make async
+  const onSubmit = async (formValues) => {  
     try {
       setLoading(true);
       setApiError("");
@@ -42,8 +42,12 @@ export default function Login() {
         password: formValues.password,
       });
 
-      login(response.data); // ← save full user object { id, firstName, lastName, username, roleId, roleName }
-      navigate("/search-patient");
+      localStorage.setItem("token", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("tokenExpiry", Date.now() + response.data.expiresInSeconds * 1000);
+
+      login(response.data.user); 
+      navigate("/patient/search-patient");
 
     } catch (error) {
       if (error.response?.status === 401) {
@@ -57,34 +61,39 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#EAF0FB] flex items-center justify-center p-4 md:p-8 lg:p-16">
-      <div className="flex w-[85%] max-w-7xl h-[80vh] bg-white rounded-4xl shadow-xl overflow-hidden">
+    <div className="h-screen overflow-hidden bg-[#EAF0FB] flex items-center justify-center p-4 sm:p-6 lg:p-10 xl:p-16">
+      <div className="flex w-full max-w-7xl h-full max-h-190 bg-white rounded-3xl lg:rounded-4xl shadow-xl overflow-hidden">
 
         {/* Left Section */}
-        <div className="relative hidden md:block md:w-1/2">
+        <div className="relative hidden md:block lg:w-1/2">
           <img src={loginImage} alt="Care For Cancer" className="w-full h-full object-cover" />
 
           <div className="absolute top-6 left-8">
             <img src={logo} alt="Care for Cancer" className="h-14 w-auto" />
           </div>
 
-          <div className="absolute top-34 left-20">
-            <h2 className="font-heading font-bold text-3xl text-primary">Compassion.</h2>
-            <h2 className="font-heading font-bold text-3xl text-primary">Care.</h2>
-            <h2 className="font-heading font-bold text-3xl text-primary">Cure.</h2>
-            <p className="mt-2 max-w-sm text-base text-blue-900">
+          <div className="absolute top-30 left-10 lg:top-34 lg:left-12">
+            <h2 className="font-heading font-bold text-2xl lg-text-3xl text-primary">Compassion.</h2>
+            <h2 className="font-heading font-bold text-2xl lg-text-3xl text-primary">Care.</h2>
+            <h2 className="font-heading font-bold text-2xl lg-text-3xl text-primary">Cure.</h2>
+            <p className="mt-2 max-w-sm text-sm lg:text-base text-blue-900">
               Care for Cancer is dedicated to supporting patients, caregivers, and healthcare professionals.
             </p>
           </div>
         </div>
 
         {/* Right Section */}
-        <div className="w-full md:w-1/2 flex justify-center p-6 md:px-14 md:py-16">
-          <div className="w-full max-w-125">
-            <h1 className="font-heading font-bold text-4xl leading-tight text-primary">Welcome back</h1>
+        <div className="w-full md:w-1/2 flex items-center justify-center overflow-y-auto p-6 sm:px-10 md:px-12 lg:px-14 md:py-6 xl:py-16">          
+        <div className="w-full max-w-lg">
+            <div className="mb-4 md:hidden">
+              <img src={logo} alt="Care for Cancer" className="h-14 w-auto" />
+            </div>
+            <h1 className="font-heading font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-primary">
+              Welcome back
+            </h1>            
             <p className="mt-3 text-sm text-textSecondary">Sign in to continue to Care for Cancer System</p>
 
-            <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+            <form className="mt-4 lg:mt-10" onSubmit={handleSubmit(onSubmit)}>
               <Input
                 label="Username"
                 name="username"

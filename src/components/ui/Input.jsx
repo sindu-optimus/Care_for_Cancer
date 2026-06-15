@@ -17,7 +17,7 @@ export default function Input({
   const hasError = error && touched;
 
   return (
-    <div className="mb-4">
+    <div className="mb-2 md-mb-4">
       <label className="block mb-2 text-text font-semibold">
         {label}
       </label>

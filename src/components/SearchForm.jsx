@@ -131,15 +131,15 @@ export default function SearchForm({ onResults }) {
 
   return (
     <>
-      <h2 className="text-3xl font-bold text-text">
+      <h2 className="text-2xl sm:text-3xl font-bold text-text mb-6">
         Search Patient
       </h2>
 
-      <div className="bg-white mt-10 rounded-2xl shadow-md p-12">
+      <div className="bg-white rounded-2xl shadow-md p-4 md:p-8">
 
         {/* NHS / MRN Search */}
         {!showOtherOptions && (
-          <div className="flex gap-6">
+          <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr] md:gap-6">
             <div className="flex-1">
               <Input
                 label="NHS Number"
@@ -155,7 +155,7 @@ export default function SearchForm({ onResults }) {
               />
             </div>
 
-            <div className="flex items-start pt-9 text-xl font-semibold text-slate-800">
+            <div className="flex items-center justify-center md:items-start md:pt-9 text-sm md:text-xl font-semibold text-slate-800">
               OR
             </div>
 
@@ -186,7 +186,7 @@ export default function SearchForm({ onResults }) {
               <span>Back to NHS / MRN Search</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <Input
                 label="Surname"
                 name="surname"
@@ -213,12 +213,12 @@ export default function SearchForm({ onResults }) {
             </div>
 
             <div className="flex justify-center mb-6">
-              <span className="px-4 py-1 bg-slate-100 text-text rounded-full text-lg font-semibold">
+              <span className="px-4 py-1 bg-slate-100 text-text rounded-full text-sm sm:text-lg font-semibold">
                 AND
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 text-gray-400">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 text-gray-400">
               <DateTimePicker
                 label="Date of Birth"
                 name="dob"
@@ -257,11 +257,11 @@ export default function SearchForm({ onResults }) {
           </div>
         )}
 
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-4">
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={loading}
-            className="bg-primary text-white px-28 py-4 rounded-lg font-semibold disabled:opacity-60"
+            className="w-full sm:w-auto bg-primary text-white cursor-pointer px-8 sm:px-20 lg:px-28 py-4 rounded-lg font-semibold disabled:opacity-60"
           >
             {loading ? "Searching..." : "Search"}
           </button>

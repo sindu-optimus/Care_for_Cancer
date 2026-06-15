@@ -105,8 +105,8 @@ export default function MDTList() {
             setShowModal(true);
           }}
           onDelete={() => {
-            setDeletingRow(row); // ← set row to delete
-            setShowConfirm(true); // ← show confirm modal
+            setDeletingRow(row); 
+            setShowConfirm(true); 
           }}
         />
       ),
@@ -114,11 +114,11 @@ export default function MDTList() {
   ];
 
   return (
-    <div className="flex-1 p-10 overflow-auto">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="font-heading font-bold text-3xl text-slate-900">MDT List</h2>
+    <div className="flex-1 overflow-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h2 className="font-heading font-bold text-2xl sm:text-3xl text-slate-900">MDT List</h2>
         <Button
-          className="px-6"
+          className="w-full sm:w-auto px-6"
           onClick={() => { setEditingRow(null); resetForm(); setShowModal(true); }}
         >
           Add MDT Type
@@ -166,7 +166,7 @@ export default function MDTList() {
           )}
 
           <div className="flex justify-end mt-4">
-            <Button className="px-6" onClick={handleSave} disabled={saving}>
+            <Button className="w-full sm:w-auto px-6" onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : editingRow ? "Update" : "Add"}
             </Button>
           </div>

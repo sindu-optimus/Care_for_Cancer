@@ -42,39 +42,33 @@ export default function DateTimePicker({
   }, []);
 
   const formatDisplay = () => {
-  if (!value) return "";
+    if (!value) return "";
 
-  const date = new Date(value);
+    const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
 
-  if (showTime) {
-    return date.toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-  }
+    if (showTime) {
+      return date.toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+    }
 
-  return date.toLocaleDateString("en-GB");
-};
+    return date.toLocaleDateString("en-GB");
+  };
 
   const handleDateSelect = (date) => {
     onChange?.({
       target: {
         name,
         value: date,
-      },
-    });
-
-    onBlur?.({
-      target: {
-        name,
       },
     });
 

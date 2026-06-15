@@ -1,7 +1,7 @@
 export default function Table({ columns, data, onRowClick }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-200">
-      <table className="w-full text-base text-left">
+    <div className="w-full overflow-x-auto rounded-xl border border-gray-200">
+      <table className="w-full min-w-[720px] text-sm sm:text-base text-left">
 
         {/* Header */}
         <thead className="bg-slate-50 border-b border-gray-200">
@@ -9,7 +9,7 @@ export default function Table({ columns, data, onRowClick }) {
             {columns.map((col) => (
               <th
                 key={col.key}
-                className="px-6 py-4 text-base font-semibold text-slate-500 tracking-wider"
+                className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-slate-500 tracking-wider whitespace-nowrap"
               >
                 {col.label}
               </th>
@@ -23,7 +23,7 @@ export default function Table({ columns, data, onRowClick }) {
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-6 py-10 text-center text-slate-400"
+                className="px-4 sm:px-6 py-10 text-center text-slate-400"
               >
                 No records found
               </td>
@@ -39,7 +39,7 @@ export default function Table({ columns, data, onRowClick }) {
                 `}
               >
                 {columns.map((col) => (
-                  <td key={col.key} className="px-6 py-4 text-slate-700">
+                  <td key={col.key} className="px-4 sm:px-6 py-3 sm:py-4 text-slate-700 align-top">
                     {col.render ? col.render(row, rowIndex) : row[col.key]}
                   </td>
                 ))}

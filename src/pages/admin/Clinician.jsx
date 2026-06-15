@@ -136,13 +136,13 @@ export default function Clinician() {
   ];
 
   return (
-    <div className="flex-1 p-10 overflow-auto">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="font-heading font-bold text-3xl text-slate-900">
+    <div className="flex-1 overflow-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h2 className="font-heading font-bold text-2xl sm:text-3xl text-slate-900">
           Clinician List
         </h2>
         <Button
-          className="px-6"
+          className="w-full sm:w-auto px-6"
           onClick={() => { setEditingRow(null); resetForm(); setShowModal(true); }}
         >
           Add Clinician
@@ -214,7 +214,7 @@ export default function Clinician() {
             )}
 
             <div className="flex justify-end mt-6">
-              <Button className="px-6" onClick={handleSave} disabled={saving}>
+              <Button className="w-full sm:w-auto px-6" onClick={handleSave} disabled={saving}>
                 {saving ? "Saving..." : editingRow ? "Update" : "Add"}
               </Button>
             </div>

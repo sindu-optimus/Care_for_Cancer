@@ -4,9 +4,11 @@ import Table from "../../components/ui/Table";
 import Button from "../../components/ui/Button";
 import TableActions from "../../components/ui/TableActions";
 import ConfirmModal from "../../components/ui/ConfirmModal";
+import Modal from "../../components/ui/Modal";
 import Select from "../../components/ui/Select";
 import FieldError from "../../components/ui/FieldError";
 import DateTimePicker from "../../components/ui/DateTimePicker/DateTimePicker";
+
 import useForm from "../../hooks/useForm";
 
 import { getMDTs } from "../../services/mdtService";
@@ -87,7 +89,7 @@ export default function Meetings() {
         await createMDTMeetings(payload);
       }
 
-      await fetchMeetings(); // refresh table
+      await fetchMeetings(); 
 
       setEditingRow(null);
       resetForm();
@@ -138,12 +140,12 @@ export default function Meetings() {
         <TableActions
           onEdit={() => {
             setEditingRow(row);
+
             prefillForm({
               mdtType: row.mdtId,
               meetingTime: row.meetingDateTime.slice(0, 16),
               additionalNotes: row.notes,
             });
-            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
           onDelete={() => {
             setDeletingRow(row);
@@ -154,18 +156,21 @@ export default function Meetings() {
     },
   ];
 
+  console.log(values.meetingTime);
+console.log(errors.meetingTime);
+
   return (
-    <div className="flex-1 p-10 overflow-auto">
-      <h2 className="font-heading font-bold text-3xl text-slate-900 mb-8">Meetings</h2>
+    <div className="flex-1 overflow-auto">
+      <h2 className="font-heading font-bold text-2xl sm:text-3xl text-text mb-4">Meetings</h2>
 
       {/* ── Form (always visible) ── */}
-      <div className="bg-white rounded-2xl shadow-md p-8 mb-8">
-        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">
-          {editingRow ? "Edit Meeting" : "Create Meeting"}
+      <div className="bg-white rounded-2xl shadow-md p-4 sm:p-8 mb-8">
+        <h3 className="text-sm font-bold text-slate-600 uppercase tracking-widest mb-4">
+          Create Meeting
         </h3>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-6">
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div>
               <label className="block mb-2 font-semibold text-text">
                   MDT Type
@@ -226,14 +231,14 @@ export default function Meetings() {
         </div>
 
         {/* Buttons */}
-        <div className="flex items-center gap-3 mt-6">
-          <Button className="px-6" onClick={handleSave}>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mt-4">
+          <Button className="w-full sm:w-auto px-6" onClick={handleSave}>
             {editingRow ? "Update Meeting" : "Create Meeting"}
           </Button>
           {editingRow && (
             <button
               onClick={() => { setEditingRow(null); resetForm(); }}
-              className="px-5 py-2.5 rounded-lg border border-gray-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-lg border border-gray-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors"
             >
               Cancel
             </button>
@@ -245,6 +250,84 @@ export default function Meetings() {
       <div className="bg-white rounded-2xl shadow-md">
         <Table columns={columns} data={tableData} />
       </div>
+
+      {editingRow && (
+        <Modal
+          title="Edit Meeting"
+          onClose={() => {
+            setEditingRow(null);
+            resetForm();
+          }}
+          size="lg"
+        >
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block mb-2 font-semibold text-text">
+                  MDT Type
+                </label>
+
+                <Select
+                  name="mdtType"
+                  value={values.mdtType}
+                  onChange={handleChange}
+                  placeholder="Select MDT Type"
+                  options={mdtOptions.map((mdt) => ({
+                    value: mdt.id,
+                    label: mdt.type,
+                  }))}
+                  error={errors.mdtType}
+                  touched={touched.mdtType}
+                />
+              </div>
+
+              <div>
+                <DateTimePicker
+                  label="Meeting Date & Time"
+                  name="meetingTime"
+                  value={values.meetingTime}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.meetingTime}
+                  touched={touched.meetingTime}
+                  showTime
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-2 text-sm font-semibold text-slate-700">
+                Additional Notes
+              </label>
+
+              <textarea
+                name="additionalNotes"
+                value={values.additionalNotes}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                maxLength={250}
+                className="w-full min-h-32 px-4 py-3 border border-gray-300 rounded-lg"
+              />
+            </div>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setEditingRow(null);
+                  resetForm();
+                }}
+                className="px-5 py-2.5 border border-gray-300 rounded-lg"
+              >
+                Cancel
+              </button>
+
+              <Button onClick={handleSave}>
+                Update Meeting
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
 
       {/* Confirm Delete */}
       {showConfirm && (

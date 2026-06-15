@@ -1,22 +1,22 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://13.40.57.192:8080/api", // ← put your base URL here
+  baseURL: "http://13.40.57.192:8080/api", 
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// // Automatically attach token to every request if it exists
-// api.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("token");
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+// Automatically attach token to every request if it exists
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-// // Handle global errors (e.g. 401 unauthorized → redirect to login)
+
 // api.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
@@ -27,5 +27,15 @@ const api = axios.create({
 //     return Promise.reject(error);
 //   }
 // );
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.log("ERROR", error);
+    console.log("RESPONSE", error.response);
+
+    return Promise.reject(error);
+  }
+);
 
 export default api;

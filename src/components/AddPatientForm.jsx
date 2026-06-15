@@ -162,14 +162,14 @@ export default function AddPatientForm({ onClose, onSuccess, patient }) {
       title={isEditing ? "Edit Patient" : "Add Patient"}
       onClose={onClose}
     >
-      <div className="space-y-8 max-h-[70vh] overflow-y-auto pr-2">
+      <div className="space-y-8">
 
         {/* ── Patient Info ── */}
         <div>
           <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
             Patient Info
           </h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="MRN"
               name="mrn"
@@ -217,7 +217,7 @@ export default function AddPatientForm({ onClose, onSuccess, patient }) {
           <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
             Demographics
           </h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block mb-2 text-sm font-semibold text-slate-700">Title</label>
               <Select
@@ -338,7 +338,7 @@ export default function AddPatientForm({ onClose, onSuccess, patient }) {
           <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
             Address
           </h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block mb-2 text-sm font-semibold text-slate-700">Address Type</label>
               <Select
@@ -411,7 +411,7 @@ export default function AddPatientForm({ onClose, onSuccess, patient }) {
 
         {/* Save Button */}
         <div className="flex justify-end">
-          <Button className="px-6" onClick={handleSave} disabled={saving}>
+          <Button className="w-full sm:w-auto px-6" onClick={handleSave} disabled={saving}>
             {saving
               ? "Saving..."
               : isEditing ? "Update Patient" : "Add Patient"

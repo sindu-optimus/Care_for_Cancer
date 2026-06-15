@@ -31,15 +31,21 @@ export default function Calendar({
   : new Date();
 
   const [hours, setHours] = useState(
-    String(initialDate.getHours()).padStart(2, "0")
+    value
+      ? String(initialDate.getHours()).padStart(2, "0")
+      : "00"
   );
 
   const [minutes, setMinutes] = useState(
-    String(initialDate.getMinutes()).padStart(2, "0")
+    value
+      ? String(initialDate.getMinutes()).padStart(2, "0")
+      : "00"
   );
 
   const [seconds, setSeconds] = useState(
-    String(initialDate.getSeconds()).padStart(2, "0")
+    value
+      ? String(initialDate.getSeconds()).padStart(2, "0")
+      : "00"
   );
 
   const year = viewDate.getFullYear();
@@ -97,10 +103,10 @@ export default function Calendar({
   };
 
   return (
-  <div className="absolute z-50 w-80 bg-white border border-gray-300 rounded-xl shadow-xl p-4">
+  <div className="absolute left-0 z-50 w-70 bg-white border border-gray-300 rounded-lg shadow-lg p-3">
 
     {/* Header */}
-    <div className="flex items-center justify-between text-gray-400 mb-4">
+    <div className="flex items-center justify-between text-gray-400 mb-2">
       <button
         type="button"
         onClick={() =>
@@ -110,7 +116,7 @@ export default function Calendar({
         <FaChevronLeft />
       </button>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 min-w-0">
         <span className="font-semibold text-primary">
           {viewDate.toLocaleString("default", {
             month: "long",
@@ -131,7 +137,7 @@ export default function Calendar({
               )
             )
           }
-          className="w-20 border border-primary rounded px-2 py-1 text-sm text-primary font-semibold focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="w-14 border border-primary rounded p-0.5 text-sm text-primary font-semibold focus:outline-none focus:ring-2 focus:ring-blue-200"
         />
       </div>
 
@@ -146,7 +152,7 @@ export default function Calendar({
     </div>
 
     {/* Weekdays */}
-    <div className="grid grid-cols-7 mb-2">
+    <div className="grid grid-cols-7 mb-1">
       {WEEKDAYS.map((day) => (
         <div
           key={day}
@@ -186,7 +192,7 @@ export default function Calendar({
               handleDateSelect(day)
             }
             className={`
-              h-9 w-9 rounded-md text-sm font-medium transition-colors
+              h-7 w-7 rounded-md text-sm font-medium transition-colors
               ${
                 isSelected
                   ? "bg-primary text-white"
@@ -204,15 +210,15 @@ export default function Calendar({
 
     {/* Time Section */}
     {showTime && (
-      <div className="border-t border-gray-200 mt-4 pt-4">
-        <p className="text-xs text-gray-400 mb-3">
+      <div className="border-t border-gray-200 pt-2">
+        <p className="text-xs text-gray-600 mb-3">
           TIME
         </p>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
           {/* Hours */}
           <div>
-            <p className="text-[10px] text-gray-400 mb-1">
+            <p className="text-[10px] text-gray-600 mb-1">
               HH
             </p>
 
@@ -238,7 +244,7 @@ export default function Calendar({
                   ).padStart(2, "0")
                 )
               }
-              className="w-16 h-10 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-12 h-8 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -248,7 +254,7 @@ export default function Calendar({
 
           {/* Minutes */}
           <div>
-            <p className="text-[10px] text-gray-400 mb-1">
+            <p className="text-[10px] text-gray-600 mb-1">
               MM
             </p>
 
@@ -274,7 +280,7 @@ export default function Calendar({
                   ).padStart(2, "0")
                 )
               }
-              className="w-16 h-10 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-12 h-8 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -284,7 +290,7 @@ export default function Calendar({
 
           {/* Seconds */}
           <div>
-            <p className="text-[10px] text-gray-400 mb-1">
+            <p className="text-[10px] text-gray-600 mb-1">
               SS
             </p>
 
@@ -310,7 +316,7 @@ export default function Calendar({
                   ).padStart(2, "0")
                 )
               }
-              className="w-16 h-10 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-12 h-8 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -318,7 +324,7 @@ export default function Calendar({
         <button
           type="button"
           onClick={handleDone}
-          className="w-full mt-4 h-11 bg-primary text-white rounded-lg font-semibold hover:opacity-90"
+          className="w-full mt-2 h-11 bg-primary text-white rounded-lg font-semibold hover:opacity-90"
         >
           Done
         </button>

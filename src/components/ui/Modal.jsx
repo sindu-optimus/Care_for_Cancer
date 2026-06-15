@@ -7,25 +7,24 @@ export default function Modal({ title, onClose, children, size = "md" }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className={`bg-white rounded-2xl shadow-xl w-full ${sizeClasses[size]}`}>
-        
-        {/* Header */}
-        <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100">
-          <h2 className="font-heading font-bold text-xl text-slate-900">{title}</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-3 sm:p-4">
+      <div className={`bg-white rounded-2xl shadow-xl w-full max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-2rem)] overflow-hidden ${sizeClasses[size]}`}>
+        <div className="flex items-center justify-between gap-4 px-4 sm:px-8 py-4 sm:py-5 border-b border-gray-100">
+          <h2 className="font-heading font-bold text-lg sm:text-xl text-slate-900">
+            {title}
+          </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="h-9 w-9 shrink-0 rounded-lg text-gray-400 hover:bg-slate-100 hover:text-gray-600 transition-colors"
+            aria-label="Close modal"
           >
-            ✕
+            x
           </button>
         </div>
 
-        {/* Content — no overflow, grows with content */}
-        <div className="px-8 py-6">
+        <div className="px-4 sm:px-8 py-5 sm:py-6 overflow-y-auto max-h-[calc(100vh-6rem)]">
           {children}
         </div>
-
       </div>
     </div>
   );

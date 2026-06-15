@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FiPlus } from "react-icons/fi";
+import { FaEye } from "react-icons/fa";
 
-import SearchForm from "../components/SearchForm";
-import Table from "../components/ui/Table";
-import Button from "../components/ui/Button";
+import SearchForm from "../../components/SearchForm";
+import Table from "../../components/ui/Table";
+import Button from "../../components/ui/Button";
 
-import { searchPatients } from "../services/patientService";
+import { searchPatients } from "../../services/patientService";
 
 export default function SearchPatient() {
   const [results, setResults]     = useState([]);
@@ -109,7 +110,7 @@ export default function SearchPatient() {
       label: "Action",
       render: (row) => (
         <button
-          className="text-primary font-medium"
+          className="text-primary font-medium cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
 
@@ -120,14 +121,15 @@ export default function SearchPatient() {
             });
           }}
         >
-          View
+          {/* View */}
+          <FaEye size={18} />
         </button>
       ),
     }
   ];
 
   return (
-    <main className="flex-1 p-10">
+    <main className="flex-1">
       <SearchForm
         onResults={(data, params) => {
           setResults(data);
@@ -137,8 +139,8 @@ export default function SearchPatient() {
       />
 
       {searched && (
-        <div className="bg-white mt-10 rounded-2xl shadow-md overflow-hidden">
-          <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+        <div className="bg-white mt-6 sm:mt-10 rounded-2xl shadow-md overflow-hidden">
+          <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
             <h2 className="font-heading font-bold text-xl text-text">
               Patients List
             </h2>
