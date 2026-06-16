@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -18,6 +18,8 @@ export default function Calendar({
   value,
   onSelect,
   showTime = false,
+  minDate = null,
+  maxDate = null,
 }) {
   const selectedDate = value
     ? new Date(value)
@@ -30,26 +32,34 @@ export default function Calendar({
   ? new Date(value)
   : new Date();
 
+  const now = new Date();
+
   const [hours, setHours] = useState(
     value
       ? String(initialDate.getHours()).padStart(2, "0")
-      : "00"
+      : String(now.getHours()).padStart(2, "0")
   );
 
   const [minutes, setMinutes] = useState(
     value
       ? String(initialDate.getMinutes()).padStart(2, "0")
-      : "00"
+      : String(now.getMinutes()).padStart(2, "0")
   );
 
   const [seconds, setSeconds] = useState(
     value
       ? String(initialDate.getSeconds()).padStart(2, "0")
-      : "00"
+      : String(now.getSeconds()).padStart(2, "0")
   );
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
+
+  const [yearInput, setYearInput] = useState(String(year));
+
+  useEffect(() => {
+    setYearInput(String(year));
+  }, [year]);
 
   const daysInMonth = new Date(
     year,
@@ -90,7 +100,7 @@ export default function Calendar({
     ).padStart(2, "0")}-${String(
       selectedDay
     ).padStart(2, "0")}T${String(
-      Math.min(23, Math.max(0, Number(hours || 0)))
+      Math.min(18, Math.max(8, Number(hours || 8)))
     ).padStart(2, "0")}:${String(
       Math.min(59, Math.max(0, Number(minutes || 0)))
     ).padStart(2, "0")}:${String(
@@ -109,9 +119,20 @@ export default function Calendar({
     <div className="flex items-center justify-between text-gray-400 mb-2">
       <button
         type="button"
-        onClick={() =>
-          setViewDate(new Date(year, month - 1, 1))
-        }
+        onClick={() => {
+          const prevMonth = new Date(year, month - 1, 1);
+
+          if (
+            !minDate ||
+            prevMonth >= new Date(
+              minDate.getFullYear(),
+              minDate.getMonth(),
+              1
+            )
+          ) {
+            setViewDate(prevMonth);
+          }
+        }}
       >
         <FaChevronLeft />
       </button>
@@ -125,19 +146,22 @@ export default function Calendar({
 
         <input
           type="number"
-          value={year}
+          value={yearInput}
           min={1900}
           max={2100}
-          onChange={(e) =>
-            setViewDate(
-              new Date(
-                Number(e.target.value),
-                month,
-                1
-              )
-            )
-          }
-          className="w-14 border border-primary rounded p-0.5 text-sm text-primary font-semibold focus:outline-none focus:ring-2 focus:ring-blue-200"
+          onChange={(e) => {
+            setYearInput(e.target.value);
+          }}
+          onBlur={() => {
+            const newYear = Number(yearInput);
+
+            if (newYear >= 1900 && newYear <= 2100) {
+              setViewDate(new Date(newYear, month, 1));
+            } else {
+              setYearInput(String(year));
+            }
+          }}
+          className="w-16 border border-primary rounded p-0.5 text-sm text-primary font-semibold focus:outline-none focus:ring-2 focus:ring-blue-200"
         />
       </div>
 
@@ -184,17 +208,44 @@ export default function Calendar({
           today.getMonth() === month &&
           today.getFullYear() === year;
 
+        const currentDate = new Date(year, month, day);
+          currentDate.setHours(0, 0, 0, 0);
+
+        const min = minDate
+          ? new Date(minDate)
+          : null;
+
+        const max = maxDate
+          ? new Date(maxDate)
+          : null;
+
+        if (min) {
+          min.setHours(0, 0, 0, 0);
+        }
+
+        if (max) {
+          max.setHours(0, 0, 0, 0);
+        }
+
+        const isDisabled =
+          (min && currentDate < min) ||
+          (max && currentDate > max);
+
         return (
           <button
             key={day}
             type="button"
+            disabled={isDisabled}
             onClick={() =>
+              !isDisabled &&
               handleDateSelect(day)
             }
             className={`
               h-7 w-7 rounded-md text-sm font-medium transition-colors
               ${
-                isSelected
+                isDisabled
+                  ? "text-gray-300 cursor-not-allowed"
+                  : isSelected
                   ? "bg-primary text-white"
                   : isToday
                   ? "border-2 border-primary text-gray-500"
@@ -214,6 +265,9 @@ export default function Calendar({
         <p className="text-xs text-gray-600 mb-3">
           TIME
         </p>
+        <p className="text-xs text-gray-500 mb-2">
+          Meeting hours: 08:00 - 18:00
+        </p>
 
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
           {/* Hours */}
@@ -224,8 +278,8 @@ export default function Calendar({
 
             <input
               type="number"
-              min="0"
-              max="23"
+              min="8"
+              max="18"
               step="1"
               value={hours}
               onChange={(e) =>
@@ -235,10 +289,8 @@ export default function Calendar({
                 setHours(
                   String(
                     Math.min(
-                      23,
-                      Math.max(
-                        0,
-                        Number(hours || 0)
+                      18,
+                      Math.max(8, Number(hours || 8)
                       )
                     )
                   ).padStart(2, "0")

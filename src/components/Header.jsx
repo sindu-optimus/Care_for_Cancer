@@ -23,14 +23,14 @@ export default function Header({ onMenuClick }) {
 
       <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         <div className="hidden sm:block text-right min-w-0">
-          <p className="text-sm text-gray-500">Welcome back,</p>
-          <p className="font-semibold truncate max-w-40 lg:max-w-56">
+          <p className="text-sm font-medium text-gray-600">Welcome back,</p>
+          <p className="font-semibold truncate max-w-40 lg:max-w-56 text-text">
             {displayName || "User"}
           </p>        
         </div>
 
         <HiOutlineUserCircle
-          className="h-9 w-9 sm:h-10 sm:w-10 shrink-0"
+          className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 text-text"
         />
       </div>
     </header>

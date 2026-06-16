@@ -99,7 +99,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
               {hasSubItems ? (
                 <div
                   onClick={() => toggleItem(item.label)}
-                  className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-slate-200 text-slate-700 rounded-lg"
+                  className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-slate-200 text-text rounded-lg"
                 >
                   <div className="flex items-center gap-4">
                     <item.icon size={20} />

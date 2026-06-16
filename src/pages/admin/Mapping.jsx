@@ -243,6 +243,7 @@ export default function MappingList() {
                   value={values.clinicianId}
                   onChange={handleChange}
                   placeholder="Select Clinician"
+                  dropdownMode="inline"
                   options={clinicianOptions.map((c) => ({
                     value: c.id,
                     label: `${c.firstname} ${c.surname}`,
@@ -255,6 +256,7 @@ export default function MappingList() {
               {/* MDT Types */}
               <MultiSelect
                 label="MDT Types"
+                dropdownMode="inline"
                 options={mdtOptions.map((mdt) => ({
                   value: mdt.id,
                   label: mdt.type,
@@ -274,7 +276,7 @@ export default function MappingList() {
               <div>
                 <h3 className="text-base font-semibold text-slate-700 mb-3">Preview</h3>
                 <div className="overflow-x-auto">
-                <table className="w-full min-w-[520px] text-sm border rounded-lg overflow-hidden">
+                <table className="w-full min-w-130 text-sm border rounded-lg overflow-hidden">
                   <thead className="bg-slate-100">
                     <tr>
                       <th className="border border-gray-300 p-2 text-left font-semibold text-slate-600">Clinician</th>

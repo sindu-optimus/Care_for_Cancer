@@ -10,6 +10,7 @@ export default function Select({
   placeholder = "Select",
   error,
   touched,
+  dropdownMode = "inline",
 }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -34,41 +35,54 @@ export default function Select({
   };
 
   return (
-    <div className="w-full" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       {/* Trigger */}
       <div
         onClick={() => setOpen((prev) => !prev)}
-        className={`w-full h-12 px-4 border rounded-lg flex items-center justify-between cursor-pointer bg-white
-          ${hasError
-            ? "border-red-400 bg-red-50"
-            : "border-gray-300"
+        className={`w-full h-12 px-4 rounded-lg flex items-center justify-between cursor-pointer
+          ${
+            hasError
+              ? "border border-red-400 bg-red-50"
+              : "border border-gray-300 bg-white"
           }`}
       >
         <span className={selectedLabel ? "text-slate-700" : "text-gray-500"}>
           {selectedLabel || placeholder}
         </span>
+
         <FaChevronDown
-          className={`text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`text-gray-400 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
         />
       </div>
 
       {/* Dropdown — inline */}
       {open && (
-        <div className="mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+        <div
+          className={`bg-white border border-gray-300 rounded-lg shadow-lg max-h-56 overflow-y-auto
+            ${
+              dropdownMode === "overlay"
+                ? "absolute top-full left-0 z-50 w-full"
+                : "w-full"
+            }`}
+        >
           <div
             onClick={() => handleSelect("")}
             className="px-4 py-2 text-gray-400 hover:bg-slate-50 cursor-pointer"
           >
             {placeholder}
           </div>
+
           {options.map((option) => (
             <div
               key={option.value}
               onClick={() => handleSelect(option.value)}
               className={`px-4 py-2 cursor-pointer hover:bg-slate-50
-                ${String(option.value) === String(value)
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-slate-700"
+                ${
+                  String(option.value) === String(value)
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-slate-700"
                 }`}
             >
               {option.label}
@@ -78,7 +92,7 @@ export default function Select({
       )}
 
       {/* Error */}
-      <div className="min-h-4">
+      <div>
         <FieldError error={error} touched={touched} />
       </div>
     </div>

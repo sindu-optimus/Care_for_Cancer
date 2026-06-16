@@ -227,6 +227,7 @@ export default function SearchForm({ onResults }) {
                 onBlur={handleBlur}
                 error={errors.dob}
                 touched={touched.dob}
+                maxDate={new Date()}
               />
     
               <div>
@@ -239,6 +240,7 @@ export default function SearchForm({ onResults }) {
                   value={values.gender}
                   onChange={handleChange}
                   placeholder="Select Gender"
+                  dropdownMode="overlay"
                   options={genderOptions.map((gender) => ({
                     value: gender.genderName,
                     label: gender.genderName,

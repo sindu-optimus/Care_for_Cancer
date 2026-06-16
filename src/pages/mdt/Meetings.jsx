@@ -161,14 +161,10 @@ console.log(errors.meetingTime);
 
   return (
     <div className="flex-1 overflow-auto">
-      <h2 className="font-heading font-bold text-2xl sm:text-3xl text-text mb-4">Meetings</h2>
+      <h2 className="font-heading font-bold text-2xl sm:text-3xl text-text mb-4">Schedule MDT Meetings</h2>
 
       {/* ── Form (always visible) ── */}
       <div className="bg-white rounded-2xl shadow-md p-4 sm:p-8 mb-8">
-        <h3 className="text-sm font-bold text-slate-600 uppercase tracking-widest mb-4">
-          Create Meeting
-        </h3>
-
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div>
@@ -180,6 +176,7 @@ console.log(errors.meetingTime);
                 value={values.mdtType}
                 onChange={handleChange}
                 placeholder="Select MDT Type"
+                dropdownMode="overlay"
                 options={mdtOptions.map((mdt) => ({
                   value: mdt.id,
                   label: mdt.type,
@@ -191,7 +188,7 @@ console.log(errors.meetingTime);
 
             <div>
               <DateTimePicker
-                label="Meeting Date & Time"
+                label="Schedule"
                 name="meetingTime"
                 value={values.meetingTime}
                 onChange={handleChange}
@@ -199,6 +196,7 @@ console.log(errors.meetingTime);
                 error={errors.meetingTime}
                 touched={touched.meetingTime}
                 showTime={true}
+                minDate={new Date()}
               />
             </div>
           </div>
@@ -248,6 +246,11 @@ console.log(errors.meetingTime);
 
       {/* ── Table ── */}
       <div className="bg-white rounded-2xl shadow-md">
+        <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+            <h2 className="font-heading font-bold text-xl text-text">
+              Scheduled Meeting
+            </h2>
+        </div>
         <Table columns={columns} data={tableData} />
       </div>
 

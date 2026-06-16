@@ -14,6 +14,8 @@ export default function DateTimePicker({
   touched,
   placeholder = "Select Date",
   showTime = false,
+  minDate = null,
+  maxDate = null,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const pickerRef = useRef(null);
@@ -89,7 +91,6 @@ export default function DateTimePicker({
             w-full h-12 px-4
             border rounded-lg
             flex items-center justify-between
-            bg-white
             ${
               error && touched
                 ? "border-red-400 bg-red-50"
@@ -115,10 +116,12 @@ export default function DateTimePicker({
             value={value}
             onSelect={handleDateSelect}
             showTime={showTime}
+            minDate={minDate}
+            maxDate={maxDate}
           />
         )}
       </div>
-
+      
       <div className="min-h-4">
         <FieldError
           error={error}

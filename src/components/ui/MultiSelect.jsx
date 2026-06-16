@@ -10,6 +10,7 @@ export default function MultiSelect({
   placeholder = "Select Options",
   error,
   touched,
+  dropdownMode = "inline",
 }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -45,14 +46,15 @@ export default function MultiSelect({
           {label}
         </label>
       )}
-      <div className="w-full" ref={dropdownRef}>
+      <div className="relative w-full" ref={dropdownRef}>
         {/* Trigger */}
         <div
           onClick={() => setOpen(!open)}
-          className={`w-full h-12 px-4 border rounded-lg flex items-center justify-between cursor-pointer bg-white
-            ${hasError
-              ? "border-red-400 bg-red-50"
-              : "border-gray-300"
+          className={`w-full h-12 px-4 border rounded-lg flex items-center justify-between cursor-pointer
+            ${
+              hasError
+                ? "border-red-400 bg-red-50"
+                : "border-gray-300 bg-white"
             }`}
         >
           <span className={`truncate ${selectedLabels.length ? "text-slate-700" : "text-gray-500"}`}>
@@ -65,7 +67,14 @@ export default function MultiSelect({
 
         {/* Dropdown — inline */}
         {open && (
-          <div className="mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+          <div
+            className={`bg-white border border-gray-300 rounded-lg shadow-lg max-h-56 overflow-y-auto
+              ${
+                dropdownMode === "overlay"
+                  ? "absolute top-full left-0 z-50 w-full"
+                  : "w-full"
+              }`}
+          >
             {options.map((option) => (
               <label
                 key={option.value}

@@ -37,6 +37,7 @@ export default function Clinician() {
   const [loading, setLoading]       = useState(false);
   const [saving, setSaving]         = useState(false);
   const [apiError, setApiError]     = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deletingRow, setDeletingRow] = useState(null);
@@ -91,7 +92,18 @@ export default function Clinician() {
       handleCloseModal();
 
     } catch (error) {
-      setApiError("Failed to save. Please try again.");
+      console.log("FULL ERROR:", error);
+      console.log("RESPONSE DATA:", error?.response?.data);
+
+      const message = error?.response?.data?.message;
+
+      if (message?.toLowerCase().includes("gmc")) {
+        setFieldErrors({
+          gmcCode: "This GMC Code already exists.",
+        });
+      } else {
+        setApiError("Failed to save. Please try again.");
+      }
     } finally {
       setSaving(false);
     }
@@ -202,8 +214,8 @@ export default function Clinician() {
               value={values.gmcCode}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.gmcCode}
-              touched={touched.gmcCode}
+              error={fieldErrors.gmcCode || errors.gmcCode}
+              touched={touched.gmcCode || !!fieldErrors.gmcCode}
             />
 
             {/* Modal API error */}
