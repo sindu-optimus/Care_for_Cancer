@@ -12,6 +12,7 @@ import DateTimePicker from "../../components/ui/DateTimePicker/DateTimePicker";
 import useForm from "../../hooks/useForm";
 
 import { getMDTs } from "../../services/mdtService";
+import { getMappingsByMDT } from "../../services/mdtClinicianService";
 import { getMDTMeetings, createMDTMeetings, updateMDTMeetings, deleteMDTMeetings } from "../../services/meetingService";
 
 const validate = (values) => {
@@ -40,6 +41,7 @@ export default function Meetings() {
   const [deletingRow, setDeletingRow] = useState(null);
 
   const [mdtOptions, setMdtOptions] = useState([]);
+  const [clinicians, setClinicians] = useState([]);
 
   useEffect(() => {
     fetchMDTs();
@@ -65,6 +67,19 @@ export default function Meetings() {
     }
   };
 
+  const fetchCliniciansByMDT = async (mdtId) => {
+    try {
+      const response = await getMappingsByMDT(mdtId);
+
+      setClinicians(
+        response.data?.[0]?.clinicians || []
+      );
+    } catch (error) {
+      console.error(error);
+      setClinicians([]);
+    }
+  };
+
   const {
     values, errors, touched,
     handleChange, handleBlur,
@@ -74,6 +89,18 @@ export default function Meetings() {
     meetingTime:     "",
     additionalNotes: "",
   }, validate);
+
+  const handleMDTChange = async (e) => {
+    handleChange(e);
+
+    const mdtId = e.target.value;
+
+    if (mdtId) {
+      await fetchCliniciansByMDT(mdtId);
+    } else {
+      setClinicians([]);
+    }
+  };
 
   const handleSave = handleSubmit(async (formValues) => {
     try {
@@ -157,7 +184,7 @@ export default function Meetings() {
   ];
 
   console.log(values.meetingTime);
-console.log(errors.meetingTime);
+  console.log(errors.meetingTime);
 
   return (
     <div className="flex-1 overflow-auto">
@@ -174,7 +201,7 @@ console.log(errors.meetingTime);
              <Select
                 name="mdtType"
                 value={values.mdtType}
-                onChange={handleChange}
+                onChange={handleMDTChange}
                 placeholder="Select MDT Type"
                 dropdownMode="overlay"
                 options={mdtOptions.map((mdt) => ({
@@ -184,6 +211,21 @@ console.log(errors.meetingTime);
                 error={errors.mdtType}
                 touched={touched.mdtType}
               />
+              {clinicians.length > 0 && (
+                <div className="my-2 text-sm">
+                  <span className="font-medium text-text">
+                    Clinicians:
+                  </span>{" "}
+                  <span className="text-primary">
+                    {clinicians
+                      .map(
+                        (c) =>
+                          `${c.clinicianFirstname} ${c.clinicianSurname}`
+                      )
+                      .join(", ")}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div>

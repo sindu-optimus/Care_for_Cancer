@@ -13,7 +13,7 @@ import useForm from "../../hooks/useForm";
 
 import { getClinicians } from "../../services/clinicianService";
 import { getMDTs } from "../../services/mdtService";
-import { getMappings, createMapping, updateMappings, deleteMapping } from "../../services/mappingService";
+import { getMappings, createMapping, updateMappings, deleteMapping } from "../../services/mdtClinicianService";
 
 const validate = (values) => {
   const errors = {};

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useIdleTimer } from "react-idle-timer";
 
 import ConfirmModal from "./ui/ConfirmModal";
-
 import { refreshTokenApi } from "../services/authService";
 
 export default function SessionTimeout() {
@@ -10,15 +10,44 @@ export default function SessionTimeout() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const warningTimerRef = useRef(null);
+  const refreshTimerRef = useRef(null);
   const logoutTimerRef = useRef(null);
 
   const logout = () => {
+    clearTimeout(refreshTimerRef.current);
+    clearTimeout(logoutTimerRef.current);
+
     localStorage.clear();
     navigate("/");
   };
 
-  const startSessionTimer = () => {
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (!refreshToken) {
+      throw new Error("Refresh token not found");
+    }
+
+    const response = await refreshTokenApi(refreshToken);
+
+    localStorage.setItem(
+      "token",
+      response.data.accessToken
+    );
+
+    localStorage.setItem(
+      "refreshToken",
+      response.data.refreshToken
+    );
+
+    localStorage.setItem(
+      "tokenExpiry",
+      Date.now() +
+        response.data.expiresInSeconds * 1000
+    );
+  };
+
+  const scheduleTokenRefresh = () => {
     const tokenExpiry = Number(
       localStorage.getItem("tokenExpiry")
     );
@@ -27,57 +56,47 @@ export default function SessionTimeout() {
 
     const timeUntilExpiry = tokenExpiry - Date.now();
 
-    // Show popup 10 seconds before expiry
-    const warningTime = timeUntilExpiry - 10000;
-    // const warningTime = 5000;
+    const refreshTime = Math.max(
+      timeUntilExpiry - 10000,
+      0
+    );
 
-    if (warningTime <= 0) {
-      setIsModalOpen(true);
-      return;
-    }
+    clearTimeout(refreshTimerRef.current);
 
-    warningTimerRef.current = setTimeout(() => {
-      setIsModalOpen(true);
-
-      logoutTimerRef.current = setTimeout(() => {
-        logout();
-      }, 10000);
-    }, warningTime);
+    refreshTimerRef.current = setTimeout(
+      async () => {
+        try {
+          await refreshAccessToken();
+          scheduleTokenRefresh();
+        } catch {
+          logout();
+        }
+      },
+      refreshTime
+    );
   };
 
-  const handleContinue = async () => {
-    try {
-      const refreshToken =
-        localStorage.getItem("refreshToken");
+  const handleIdle = () => {
+    clearTimeout(logoutTimerRef.current);
 
-      const response = await refreshTokenApi(
-        refreshToken
-      );
+    setIsModalOpen(true);
 
-      localStorage.setItem(
-        "token",
-        response.data.accessToken
-      );
-
-      localStorage.setItem(
-        "refreshToken",
-        response.data.refreshToken
-      );
-
-      localStorage.setItem(
-        "tokenExpiry",
-        Date.now() +
-          response.data.expiresInSeconds * 1000
-      );
-
-      clearTimeout(logoutTimerRef.current);
-
-      setIsModalOpen(false);
-
-      startSessionTimer();
-    } catch (error) {
+    logoutTimerRef.current = setTimeout(() => {
       logout();
-    }
+    }, 30000);
+  };
+
+  const { reset } = useIdleTimer({
+    timeout: 10 * 60 * 1000,
+    onIdle: handleIdle
+  });
+
+  const handleContinue = () => {
+    clearTimeout(logoutTimerRef.current);
+
+    setIsModalOpen(false);
+
+    reset();
   };
 
   const handleCancel = () => {
@@ -85,10 +104,10 @@ export default function SessionTimeout() {
   };
 
   useEffect(() => {
-    startSessionTimer();
+    scheduleTokenRefresh();
 
     return () => {
-      clearTimeout(warningTimerRef.current);
+      clearTimeout(refreshTimerRef.current);
       clearTimeout(logoutTimerRef.current);
     };
   }, []);
@@ -97,12 +116,12 @@ export default function SessionTimeout() {
     <>
       {isModalOpen && (
         <ConfirmModal
-            title="Session Expiring"
-            message="Your session will expire in 10 seconds. Do you want to continue?"
-            confirmText="Continue"
-            cancelText="Cancel"
-            onConfirm={handleContinue}
-            onClose={handleCancel}
+          title="Session Timeout"
+          message="You have been inactive for 10 minutes. Do you want to continue your session?"
+          confirmText="Continue"
+          cancelText="Logout"
+          onConfirm={handleContinue}
+          onClose={handleCancel}
         />
       )}
     </>

@@ -112,8 +112,21 @@ export default function Calendar({
     onSelect(formatted);
   };
 
+  const totalMinutes =
+    Number(hours || 0) * 60 +
+    Number(minutes || 0);
+
+  const isInvalidTime =
+    totalMinutes < 8 * 60 ||
+    totalMinutes > 18 * 60;
+
+  const timeError =
+    isInvalidTime
+      ? "Meeting time must be between 08:00 and 18:00"
+      : "";
+
   return (
-  <div className="absolute left-0 z-50 w-70 bg-white border border-gray-300 rounded-lg shadow-lg p-3">
+  <div className="absolute right-0 z-50 w-70 bg-white border border-gray-300 rounded-lg shadow-lg p-3">
 
     {/* Header */}
     <div className="flex items-center justify-between text-gray-400 mb-2">
@@ -373,10 +386,22 @@ export default function Calendar({
           </div>
         </div>
 
+        {timeError && (
+          <p className="mt-2 text-xs text-red-500">
+            {timeError}
+          </p>
+        )}
+
         <button
           type="button"
           onClick={handleDone}
-          className="w-full mt-2 h-11 bg-primary text-white rounded-lg font-semibold hover:opacity-90"
+          disabled={isInvalidTime}
+          className={`w-full mt-2 h-11 rounded-lg font-semibold
+            ${
+              isInvalidTime
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-primary text-white hover:opacity-90"
+            }`}
         >
           Done
         </button>

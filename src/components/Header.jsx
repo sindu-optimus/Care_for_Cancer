@@ -17,11 +17,11 @@ export default function Header({ onMenuClick }) {
         <MdMenu size={24} />
       </button>
 
-      <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-primary truncate">
+      <h1 className="absolute left-1/2 -translate-x-1/2 text-xl md:text-2xl lg:text-3xl font-bold text-primary">
         Care for Cancer
       </h1>
 
-      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0 ml-auto">
         <div className="hidden sm:block text-right min-w-0">
           <p className="text-sm font-medium text-gray-600">Welcome back,</p>
           <p className="font-semibold truncate max-w-40 lg:max-w-56 text-text">
