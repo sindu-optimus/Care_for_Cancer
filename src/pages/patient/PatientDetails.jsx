@@ -26,14 +26,17 @@ export default function PatientDetails() {
                 const response = await getReferralsByPatientId(patient.id);
 
                 const formattedData = response.data.map((referral) => ({
-                ...referral,
-                appointmentDate: new Date(
-                    referral.appointmentDate
-                ).toLocaleString("en-GB"),
-                systemCreatedDateTime: new Date(
-                    referral.systemCreatedDateTime
-                ).toLocaleString("en-GB"),
-                }));
+                    ...referral,
+                    referralReceivedDate: new Date(
+                        referral.referralReceivedDate
+                    ).toLocaleString("en-GB"),
+                    appointmentDate: new Date(
+                        referral.appointmentDate
+                    ).toLocaleString("en-GB"),
+                    systemCreatedDateTime: new Date(
+                        referral.systemCreatedDateTime
+                    ).toLocaleString("en-GB"),
+                    }));
 
                 setReferralData(formattedData);
             } catch (error) {
@@ -48,37 +51,25 @@ export default function PatientDetails() {
 
     const referralColumns = [
     {
-        key: "id",
-        label: "ID",
-    },
-    // {
-    //     key: "patientId",
-    //     label: "Patient ID",
-    // },
-    {
-        key: "specialityDescription",
-        label: "Speciality",
+        key: "cancerType",
+        label: "Cancer Type",
     },
     {
         key: "priorityDescription",
         label: "Priority",
     },
     {
-        key: "cancerType",
-        label: "Cancer Type",
-    },
-    {
         key: "pathwayUbrnId",
         label: "Pathway UBRN",
     },
-    {
-        key: "appointmentDate",
-        label: "Appointment Date",
-    },
-    {
-        key: "appointmentStatus",
-        label: "Appointment Status",
-    },
+    // {
+    //     key: "appointmentDate",
+    //     label: "Appointment Date",
+    // },
+    // {
+    //     key: "appointmentStatus",
+    //     label: "Appointment Status",
+    // },
     {
         key: "appointmentClinician",
         label: "Appointment Clinician",
@@ -88,8 +79,8 @@ export default function PatientDetails() {
         label: "Referral Clinician",
     },
     {
-        key: "systemCreatedDateTime",
-        label: "Created Date",
+        key: "referralReceivedDate",
+        label: "Referral Received Date",
     },
     ];
 
@@ -155,13 +146,6 @@ export default function PatientDetails() {
                     <div>
                     <strong>Status:</strong>{" "}
                     {patient.isActive ? "Active" : "Inactive"}
-                    </div>
-
-                    <div>
-                    <strong>Registration Date:</strong>{" "}
-                    {patient.regDate
-                        ? new Date(patient.regDate).toLocaleDateString("en-GB")
-                        : "-"}
                     </div>
                 </div>
 

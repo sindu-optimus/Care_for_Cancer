@@ -159,7 +159,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
       <div className="border-t border-gray-300 px-8 py-4">
         <button
           onClick={handleSignOut}  
-          className="flex items-center gap-4 text-lg text-text"
+          className="flex items-center gap-4 text-lg text-text cursor-pointer"
         >
           <FaSignOutAlt />
           Sign Out

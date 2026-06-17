@@ -83,14 +83,14 @@ export default function DateTimePicker({
         {label}
       </label>
 
-      <div className="relative">
+      <div className="relative cursor-pointer">
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
           className={`
             w-full h-12 px-4
             border rounded-lg
-            flex items-center justify-between
+            flex items-center justify-between cursor-pointer
             ${
               error && touched
                 ? "border-red-400 bg-red-50"

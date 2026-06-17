@@ -1,10 +1,10 @@
 export default function Table({ columns, data, onRowClick }) {
   return (
     <div className="w-full overflow-x-auto rounded-xl border border-gray-200">
-      <table className="w-full min-w-[720px] text-sm sm:text-base text-left">
+      <table className="w-full min-w-180 text-sm sm:text-base text-left">
 
         {/* Header */}
-        <thead className="bg-slate-50 border-b border-gray-200">
+        <thead className="bg-slate-100 border-b border-gray-200">
           <tr>
             {columns.map((col) => (
               <th
@@ -35,7 +35,7 @@ export default function Table({ columns, data, onRowClick }) {
                 onClick={() => onRowClick?.(row)}
                 className={`
                   bg-white transition-colors
-                  ${onRowClick ? "cursor-pointer hover:bg-slate-50" : ""}
+                  ${onRowClick ? "cursor-pointer hover:bg-slate-100" : ""}
                 `}
               >
                 {columns.map((col) => (

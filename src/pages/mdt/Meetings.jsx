@@ -7,6 +7,7 @@ import ConfirmModal from "../../components/ui/ConfirmModal";
 import Modal from "../../components/ui/Modal";
 import Select from "../../components/ui/Select";
 import FieldError from "../../components/ui/FieldError";
+// import VoiceButton from "../../components/ui/VoiceButton";
 import DateTimePicker from "../../components/ui/DateTimePicker/DateTimePicker";
 
 import useForm from "../../hooks/useForm";
@@ -42,6 +43,7 @@ export default function Meetings() {
 
   const [mdtOptions, setMdtOptions] = useState([]);
   const [clinicians, setClinicians] = useState([]);
+
 
   useEffect(() => {
     fetchMDTs();
@@ -125,6 +127,15 @@ export default function Meetings() {
     }
   });
 
+  // const handleVoiceTranscript = (text) => {
+  //   handleChange({
+  //     target: {
+  //       name: "additionalNotes",
+  //       value: text,
+  //     },
+  //   });
+  // };
+
   const handleDelete = () => {
     setTableData((prev) => prev.filter((item) => item.id !== deletingRow.id));
     setShowConfirm(false);
@@ -183,8 +194,8 @@ export default function Meetings() {
     },
   ];
 
-  console.log(values.meetingTime);
-  console.log(errors.meetingTime);
+  // console.log(values.meetingTime);
+  // console.log(errors.meetingTime);
 
   return (
     <div className="flex-1 overflow-auto">
@@ -245,9 +256,15 @@ export default function Meetings() {
 
           {/* Left — Additional Notes (tall) */}
           <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-semibold text-slate-700">
-              Additional Notes
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-slate-700">
+                Additional Notes
+              </label>
+
+              {/* <VoiceButton
+  setTranscript={handleVoiceTranscript}
+/> */}
+            </div>
             <textarea
               name="additionalNotes"
               value={values.additionalNotes}

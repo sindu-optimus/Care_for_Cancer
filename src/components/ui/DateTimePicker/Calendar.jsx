@@ -28,11 +28,14 @@ export default function Calendar({
   const [viewDate, setViewDate] = useState(
     selectedDate
   );
+  const [now, setNow] = useState(new Date());
+  const [dateError, setDateError] = useState("");
+
   const initialDate = value
   ? new Date(value)
   : new Date();
 
-  const now = new Date();
+  // const now = new Date();
 
   const [hours, setHours] = useState(
     value
@@ -61,6 +64,34 @@ export default function Calendar({
     setYearInput(String(year));
   }, [year]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(new Date());
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        setNow(new Date());
+      }
+    };
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+
+    return () => {
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
+    };
+  }, []);
+
   const daysInMonth = new Date(
     year,
     month + 1,
@@ -79,6 +110,7 @@ export default function Calendar({
 
   const handleDateSelect = (day) => {
     setSelectedDay(day);
+    setDateError("");
 
     if (!showTime) {
       const formatted = `${year}-${String(
@@ -93,7 +125,11 @@ export default function Calendar({
   };
 
   const handleDone = () => {
-    if (!selectedDay) return;
+    if (!selectedDay) {
+      setDateError("Please select a date");
+      return;
+    }
+    if (isInvalidTime) return;
 
     const formatted = `${year}-${String(
       month + 1
@@ -113,17 +149,41 @@ export default function Calendar({
   };
 
   const totalMinutes =
-    Number(hours || 0) * 60 +
-    Number(minutes || 0);
+  Number(hours || 0) * 60 +
+  Number(minutes || 0);
 
-  const isInvalidTime =
+  const selectedDateTime = new Date(
+    `${year}-${String(month + 1).padStart(2, "0")}-${String(
+      selectedDay || 1
+    ).padStart(2, "0")}T${String(hours || 0).padStart(
+      2,
+      "0"
+    )}:${String(minutes || 0).padStart(2, "0")}:${String(
+      seconds || 0
+    ).padStart(2, "0")}`
+  );
+
+  const currentDateTime = now;
+
+  const isOutsideMeetingHours =
     totalMinutes < 8 * 60 ||
     totalMinutes > 18 * 60;
 
-  const timeError =
-    isInvalidTime
-      ? "Meeting time must be between 08:00 and 18:00"
-      : "";
+  const isPastDateTime =
+    selectedDay &&
+    selectedDateTime < currentDateTime;
+
+  const isInvalidTime =
+    isOutsideMeetingHours || isPastDateTime;
+
+  const isDoneDisabled =
+    !selectedDay || isInvalidTime;
+
+  const timeError = isPastDateTime
+    ? "Meeting time cannot be in the past"
+    : isOutsideMeetingHours
+    ? "Meeting time must be between 08:00 and 18:00"
+    : "";
 
   return (
   <div className="absolute right-0 z-50 w-70 bg-white border border-gray-300 rounded-lg shadow-lg p-3">
@@ -254,7 +314,7 @@ export default function Calendar({
               handleDateSelect(day)
             }
             className={`
-              h-7 w-7 rounded-md text-sm font-medium transition-colors
+              h-7 w-7 rounded-md text-sm font-medium transition-colors cursor-pointer
               ${
                 isDisabled
                   ? "text-gray-300 cursor-not-allowed"
@@ -392,11 +452,17 @@ export default function Calendar({
           </p>
         )}
 
+        {dateError && (
+          <p className="mt-2 text-xs text-red-600">
+            {dateError}
+          </p>
+        )}
+
         <button
           type="button"
           onClick={handleDone}
-          disabled={isInvalidTime}
-          className={`w-full mt-2 h-11 rounded-lg font-semibold
+          disabled={isDoneDisabled}
+          className={`w-full mt-2 h-11 rounded-lg font-semibold cursor-pointer
             ${
               isInvalidTime
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"

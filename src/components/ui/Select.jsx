@@ -78,7 +78,7 @@ export default function Select({
             <div
               key={option.value}
               onClick={() => handleSelect(option.value)}
-              className={`px-4 py-2 cursor-pointer hover:bg-slate-50
+              className={`px-4 py-2 cursor-pointer hover:bg-slate-100
                 ${
                   String(option.value) === String(value)
                     ? "bg-primary/10 text-primary font-medium"

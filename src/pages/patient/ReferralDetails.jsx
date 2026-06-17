@@ -24,18 +24,8 @@ export default function ReferralDetails(
 
   return (
     <main className="flex-1">
-{/* Patient Summary */}
       <div className="rounded-2xl mb-4">
-          {/* <h2 className="font-heading font-bold text-lg text-text mb-4">
-              Patient Information
-          </h2> */}
-
-        <div 
-            className="bg-white rounded-2xl shadow-md p-4"
-            >
-              <h2 className="font-heading font-bold text-lg text-text mb-4">
-                Patient Information
-            </h2>
+        <div className="bg-white rounded-2xl shadow-md p-4">
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <span>
               <strong>NHS:</strong> {patient?.nhsNumber || "-"}
@@ -80,11 +70,8 @@ export default function ReferralDetails(
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div>
-            <strong>Referral ID:</strong> {referral?.id || "-"}
-          </div>
-
-          <div>
-            <strong>Patient ID:</strong> {referral?.patientId || "-"}
+            <strong>Referral Clinician:</strong>{" "}
+            {referral?.referralClinician || "-"}
           </div>
 
           <div>
@@ -114,9 +101,7 @@ export default function ReferralDetails(
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <strong>Appointment Date:</strong>{" "}
-            {referral?.appointmentDate
-              ? new Date(referral.appointmentDate).toLocaleString("en-GB")
-              : "-"}
+            {referral?.appointmentDate || "-"}
           </div>
 
           <div>
@@ -127,24 +112,6 @@ export default function ReferralDetails(
           <div>
             <strong>Appointment Clinician:</strong>{" "}
             {referral?.appointmentClinician || "-"}
-          </div>
-
-          <div>
-            <strong>Referral Clinician:</strong>{" "}
-            {referral?.referralClinician || "-"}
-          </div>
-        </div>
-
-        <h3 className="text-primary font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mt-10 mb-5">
-          Audit Information
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <div>
-            <strong>Created Date:</strong>{" "}
-            {referral?.systemCreatedDateTime
-              ? new Date(referral.systemCreatedDateTime).toLocaleString("en-GB")
-              : "-"}
           </div>
         </div>
       </div>

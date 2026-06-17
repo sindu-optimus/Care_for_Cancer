@@ -44,7 +44,6 @@ export default function SearchPatient() {
   };
 
   const columns = [
-    { key: "id", label: "S.No", render: (_, index) => index + 1 },
     { key: "mrn", label: "MRN" },
     { key: "nhsNumber", label: "NHS Number" },
 
@@ -78,24 +77,6 @@ export default function SearchPatient() {
         row.demographics?.dob
           ? new Date(row.demographics.dob).toLocaleDateString("en-GB")
           : "-",
-    },
-
-    {
-      key: "view",
-      label: "View",
-      render: (row) => (
-        <button
-          className="text-primary font-medium cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/search-patient/${row.id}`, {
-              state: { patient: row },
-            });
-          }}
-        >
-          <FaEye size={18} />
-        </button>
-      ),
     },
   ];
 
