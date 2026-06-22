@@ -13,7 +13,7 @@ import logo from "../assets/optimus-logo.png";
 
 const menuItems = [
   { icon: FaSearch, label: "Search Patient", path: "/patient/search-patient" },
-  { icon: BsGrid, label: "Dashboard", path: "/dashboard" },
+  { icon: BsGrid, label: "Dashboard", path: "/mdt/dashboard" },
   {
     icon: FaRegCalendarAlt,
     label: "MDT",

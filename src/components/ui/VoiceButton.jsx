@@ -1,55 +1,86 @@
-import { useEffect } from "react";
-import { FaMicrophone } from "react-icons/fa";
+import { useEffect, useRef } from "react";
+import { FaMicrophone, FaStop } from "react-icons/fa";
+
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
 export default function VoiceButton({
-    setTranscript,
-    }) {
-    const {
-        transcript: speechText,
-        listening,
-        resetTranscript,
-        browserSupportsSpeechRecognition,
-    } = useSpeechRecognition();
+  onLiveTranscript,
+  onFinalTranscript,
+}) {
+  const lastProcessedRef = useRef("");
 
-    useEffect(() => {
-        console.log("Speech:", speechText);
-        setTranscript(speechText);
-    }, [speechText]);
+  const {
+    transcript,
+    finalTranscript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
 
-    if (!browserSupportsSpeechRecognition) {
-        return <span>Speech recognition not supported.</span>;
+  useEffect(() => {
+    onLiveTranscript?.(transcript);
+  }, [transcript, onLiveTranscript]);
+
+  useEffect(() => {
+    if (
+      finalTranscript &&
+      finalTranscript !== lastProcessedRef.current
+    ) {
+      lastProcessedRef.current = finalTranscript;
+
+      onFinalTranscript?.(finalTranscript);
+
+      resetTranscript();
     }
+  }, [finalTranscript, onFinalTranscript, resetTranscript]);
 
-    const handleClick = () => {
-        console.log("Mic clicked");
-        if (listening) {
-        SpeechRecognition.stopListening();
-        } else {
-        resetTranscript();
+  const handleClick = () => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+    } else {
+      lastProcessedRef.current = "";
+      resetTranscript();
 
-        SpeechRecognition.startListening({
-            continuous: true,
-            language: "en-GB",
-        });
-        }
-    };
+      SpeechRecognition.startListening({
+        continuous: true,
+        interimResults: true,
+        language: "en-US",
+      });
+    }
+  };
 
-    return (
-        <button
-        type="button"
-        onClick={handleClick}
-        className={`p-2 rounded-full transition
-            ${
-            listening
-                ? "bg-red-100 text-red-600"
-                : "bg-primary/10 text-primary"
-            }`}
-        title={listening ? "Stop Recording" : "Start Recording"}
-        >
-        <FaMicrophone size={16} />
-        </button>
-    );
+  if (!browserSupportsSpeechRecognition) {
+    return null;
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className="relative cursor-pointer group"
+    >
+      {listening ? (
+        <FaMicrophone className="text-red-500" />
+      ) : (
+        <FaMicrophone className="text-primary" />
+      )}
+
+      <span
+        className="
+          absolute bottom-full left-1/2 ml-2
+          -translate-x-1/2
+          whitespace-nowrap
+          rounded bg-gray-800 px-2 py-1
+          text-xs text-white
+          opacity-0 transition-opacity
+          group-hover:opacity-100
+          pointer-events-none
+        "
+      >
+        {listening ? "Stop Recording" : "Start Voice Input"}
+      </span>
+    </button>
+  );
 }

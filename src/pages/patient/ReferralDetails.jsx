@@ -60,11 +60,11 @@ export default function ReferralDetails(
       </div>
 
       <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
-        <h2 className="font-heading font-bold text-xl text-text mb-6">
+        {/* <h2 className="font-heading font-bold text-xl text-text mb-6">
           Referral Details
-        </h2>
+        </h2> */}
 
-        <h3 className="text-primary font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mb-5">
+        <h3 className="text-primary p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mb-5">
           Referral Information
         </h3>
 
@@ -94,7 +94,7 @@ export default function ReferralDetails(
           </div>
         </div>
 
-        <h3 className="text-primary font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mt-10 mb-5">
+        <h3 className="text-primary p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mt-4 mb-5">
           Appointment Information
         </h3>
 
@@ -111,7 +111,7 @@ export default function ReferralDetails(
 
           <div>
             <strong>Appointment Clinician:</strong>{" "}
-            {referral?.appointmentClinician || "-"}
+            {referral?.appointmentClinicianName || "-"}
           </div>
         </div>
       </div>

@@ -71,7 +71,7 @@ export default function PatientDetails() {
     //     label: "Appointment Status",
     // },
     {
-        key: "appointmentClinician",
+        key: "appointmentClinicianName",
         label: "Appointment Clinician",
     },
     {
@@ -103,12 +103,12 @@ export default function PatientDetails() {
             </div>
 
             <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
-                <h2 className="font-heading font-bold text-xl text-text mb-6">
+                {/* <h2 className="font-heading font-bold text-xl text-text mb-6">
                     Patient Details
-                </h2>
+                </h2> */}
 
-                <h3 className="text-primary font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mb-5">
-                    Basic Information
+                <h3 className="text-primary p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mb-5">
+                    Patient Information
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -149,7 +149,7 @@ export default function PatientDetails() {
                     </div>
                 </div>
 
-                <h3 className="text-primary font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mt-10 mb-5">
+                <h3 className="text-primary p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mt-10 mb-5">
                     Contact Information
                 </h3>
 
@@ -185,7 +185,7 @@ export default function PatientDetails() {
                     </div>
                 </div>
 
-                <h3 className="text-primary font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mt-10 mb-5">
+                <h3 className="text-primary  p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mt-4 mb-5">
                     Additional Information
                 </h3>
 

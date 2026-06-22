@@ -231,7 +231,7 @@ export default function MappingList() {
         >
           <div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
 
               {/* Clinician */}
               <div>

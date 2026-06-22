@@ -93,7 +93,7 @@ export default function MultiSelect({
         )}
 
         {/* Error */}
-        <div className="min-h-4">
+        <div>
           <FieldError error={error} touched={touched} />
         </div>
       </div>

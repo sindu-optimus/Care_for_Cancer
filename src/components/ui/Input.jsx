@@ -13,12 +13,13 @@ export default function Input({
   error,
   touched,
   maxLength,
+  disabled,
 }) {
   const hasError = error && touched;
 
   return (
     <div className="mb-2 md-mb-4">
-      <label className="block mb-2 text-text font-semibold">
+      <label className="block mb-2 text-text font-semibold font-lg">
         {label}
       </label>
       <div className="relative">
@@ -35,6 +36,10 @@ export default function Input({
           onChange={onChange}
           onBlur={onBlur}
           maxLength={maxLength}
+          disabled={disabled}
+          //  style={{
+          //     width: `${Math.max(value?.length || 0, placeholder?.length || 0, 5)}ch`,
+          //   }}
           className={`
             w-full h-12 pr-4
             ${leftIcon ? "pl-12" : "pl-4"}
