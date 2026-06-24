@@ -227,7 +227,7 @@ export default function MappingList() {
         <Modal
           title={editingRow ? "Edit Mapping" : "Create Mapping"}
           onClose={handleCloseModal}
-          size="lg"
+          // size="md"
         >
           <div>
 

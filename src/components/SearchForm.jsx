@@ -280,7 +280,7 @@ export default function SearchForm({ onResults }) {
           <p className="flex items-center text-text text-sm">
             Click here to search by{" "}
             <span
-              className="text-primary cursor-pointer font-medium"
+              className="text-primary cursor-pointer font-medium pl-1"
               onClick={() => setShowOtherOptions(true)}
             >
               other options

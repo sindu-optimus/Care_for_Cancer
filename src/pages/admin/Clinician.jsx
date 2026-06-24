@@ -182,6 +182,7 @@ export default function Clinician() {
         <Modal
           title={editingRow ? "Edit Clinician" : "Add Clinician"}
           onClose={handleCloseModal}
+          size="md"
         >
           <div className="space-y-1">
             <Input
@@ -248,3 +249,4 @@ export default function Clinician() {
     </div>
   );
 }
+

@@ -295,7 +295,14 @@ export default function MeetingDetails() {
       setShowContinueModal(true);
     } catch (error) {
       console.error("Failed to save MDT investigation", error);
-      setSubmitError("Failed to submit meeting details. Please try again.");
+
+      if (error.response?.status === 409) {
+        setSubmitError(error.response.data.message);
+      } else {
+        setSubmitError(
+          "Failed to submit meeting details. Please try again."
+        );
+      }
     }
   });
 
@@ -342,7 +349,7 @@ export default function MeetingDetails() {
   ];
 
   const handleFinish = () => {
-    navigate("/dashboard");
+    navigate("/mdt/dashboard");
   };
 
   return (
@@ -575,7 +582,7 @@ export default function MeetingDetails() {
                             options={
                               catalogues[item.id]?.map((c) => ({
                                 value: c.id,
-                                label: `${c.code}, ${c.description}`,
+                                label: `${c.code} - (${c.description})`,
                               })) || []
                             }
                           />
