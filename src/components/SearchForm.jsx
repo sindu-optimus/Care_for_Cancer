@@ -131,12 +131,10 @@ export default function SearchForm({ onResults }) {
 
   return (
     <>
-      <h2 className="text-2xl sm:text-3xl font-bold text-text mb-6">
-        Search Patient
-      </h2>
-
-      <div className="bg-white rounded-2xl shadow-md p-4 md:p-8">
-
+      <div className="bg-white mt-10 rounded-2xl shadow-md p-4 md:p-8">
+        <h3 className="text-primary p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mb-5">
+          Search Patient
+        </h3>
         {/* NHS / MRN Search */}
         {!showOtherOptions && (
           <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr] md:gap-6">

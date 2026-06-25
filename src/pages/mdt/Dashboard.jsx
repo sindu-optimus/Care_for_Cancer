@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Table from "../../components/ui/Table";
 import { getPatientInvestigationMDT } from "../../services/investigationService";
 
 export default function Dashboard() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchDashboardData();
@@ -72,7 +74,15 @@ export default function Dashboard() {
               No data found
             </div>
           ) : (
-            <Table columns={columns} data={data} />
+            <Table
+              columns={columns}
+              data={data}
+              onRowClick={(row) => {
+                navigate(`/mdt/dashboard/investigations/${row.id}`, {
+                  state: { investigation: row },
+                });
+              }}
+            />
           )}
         </div>
       </div>

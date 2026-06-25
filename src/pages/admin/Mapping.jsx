@@ -235,7 +235,7 @@ export default function MappingList() {
 
               {/* Clinician */}
               <div>
-                <label className="block mb-2 font-semibold text-text">
+                <label className="block mb-1.5 text-sm font-semibold text-text">
                   Clinician
                 </label>
                 <Select

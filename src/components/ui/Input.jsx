@@ -19,7 +19,7 @@ export default function Input({
 
   return (
     <div className="mb-2 md-mb-4">
-      <label className="block mb-2 text-text font-semibold font-lg">
+      <label className="block mb-1.5 text-sm text-text font-semibold">
         {label}
       </label>
       <div className="relative">

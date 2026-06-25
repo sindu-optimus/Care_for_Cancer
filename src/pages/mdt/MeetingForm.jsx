@@ -23,7 +23,7 @@ export default function MeetingForm({
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div>
-            <label className="block mb-2 font-semibold text-text">
+            <label className="block mb-1.5 text-sm font-semibold text-text">
               MDT Type
             </label>
 

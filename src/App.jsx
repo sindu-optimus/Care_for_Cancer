@@ -5,6 +5,7 @@ import SearchPatient from "./pages/patient/SearchPatient";
 import PatientDetails from "./pages/patient/PatientDetails";
 import ReferralDetails from "./pages/patient/ReferralDetails";
 import Dashboard from "./pages/mdt/Dashboard";
+import InvestigationDetails from "./pages/mdt/InvestigationDetails";
 import MDTList from "./pages/admin/MDTList";
 import Clinician from "./pages/admin/Clinician";
 import Mapping from "./pages/admin/Mapping";
@@ -33,6 +34,10 @@ export default function App() {
             element={<ReferralDetails />}
           />
           <Route path="/mdt/dashboard" element={<Dashboard />} />
+          <Route
+            path="/mdt/dashboard/investigations/:id"
+            element={<InvestigationDetails />}
+          />
           <Route path="/admin/mdtList" element={<MDTList />} />
           <Route path="/admin/clinician" element={<Clinician />} />
           <Route path="/admin/mapping" element={<Mapping />} />

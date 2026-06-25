@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FiPlus } from "react-icons/fi";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaArrowLeft } from "react-icons/fa";
 
 import SearchForm from "../../components/SearchForm";
 import Table from "../../components/ui/Table";
@@ -16,6 +16,7 @@ export default function SearchPatient() {
   const [showModal, setShowModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [lastSearchParams, setLastSearchParams] = useState({});
+  const [isSearchResult, setIsSearchResult] = useState(false);
 
   const navigate = useNavigate();
 
@@ -40,6 +41,18 @@ export default function SearchPatient() {
       setResults(response.data);
     } catch (error) {
       console.error("Failed to refresh results", error);
+    }
+  };
+
+  const handleBackToSearch = async () => {
+    setIsSearchResult(false);
+    setLastSearchParams({});
+
+    try {
+      const response = await searchPatients({});
+      setResults(response.data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -82,21 +95,16 @@ export default function SearchPatient() {
 
   return (
     <main className="flex-1">
-      <SearchForm
-        onResults={(data, params) => {
-          setResults(data);
-          setSearched(true);
-          setLastSearchParams(params); 
-        }}
-      />
-
+      <h2 className="text-2xl sm:text-3xl font-bold text-text mb-6">
+        Search Patient
+      </h2>
       {searched && (
-        <div className="bg-white mt-6 sm:mt-10 rounded-2xl shadow-md overflow-hidden">
-          <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+          {/* <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
             <h2 className="font-heading font-bold text-xl text-text">
               Patients List
             </h2>
-          </div>
+          </div> */}
           <Table
             columns={columns}
             data={results}
@@ -106,6 +114,27 @@ export default function SearchPatient() {
               });
             }}
           />
+        </div>
+      )}
+
+      {!isSearchResult && (
+        <SearchForm
+          onResults={(data, params) => {
+            setResults(data);
+            setSearched(true);
+            setLastSearchParams(params);
+            setIsSearchResult(true);
+          }}
+        />
+      )}
+
+      {isSearchResult && (
+        <div
+          className="flex items-center gap-2 mt-6 cursor-pointer text-primary font-medium"
+          onClick={handleBackToSearch}
+        >
+          <FaArrowLeft />
+          <span>Back to Search Patient</span>
         </div>
       )}
     </main>

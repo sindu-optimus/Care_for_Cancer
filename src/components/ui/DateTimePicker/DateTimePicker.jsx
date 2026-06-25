@@ -79,7 +79,7 @@ export default function DateTimePicker({
 
   return (
     <div className="mb-4" ref={pickerRef}>
-      <label className="block mb-2 text-text font-semibold">
+      <label className="block mb-1.5 text-sm text-text font-semibold">
         {label}
       </label>
 
