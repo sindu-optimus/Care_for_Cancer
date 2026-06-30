@@ -73,7 +73,7 @@ export default function MeetingForm({
           </div>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col mt-4">
           <div className="flex items-center justify-between mb-2">
             <label className="text-sm font-semibold text-slate-700">
               Additional Notes

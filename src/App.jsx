@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import MainLayout from "./layout/MainLayout";
-import SearchPatient from "./pages/patient/SearchPatient";
-import PatientDetails from "./pages/patient/PatientDetails";
-import ReferralDetails from "./pages/patient/ReferralDetails";
+import SearchPatient from "./pages/referral/SearchPatient";
+import PatientDetails from "./pages/referral/patient-details/PatientDetails";
+import ReferralDetails from "./pages/referral/ReferralDetails";
 import Dashboard from "./pages/mdt/Dashboard";
 import InvestigationDetails from "./pages/mdt/InvestigationDetails";
 import MDTList from "./pages/admin/MDTList";
@@ -23,7 +23,7 @@ export default function App() {
 
         {/* All these pages share the Layout (sidebar + header) */}
         <Route element={<MainLayout />}>
-          <Route path="/patient/search-patient" element={<SearchPatient />} />
+          <Route path="/referral/search-patient" element={<SearchPatient />} />
           <Route path="/search-patient" element={<SearchPatient />} />
           <Route
             path="/search-patient/:id"

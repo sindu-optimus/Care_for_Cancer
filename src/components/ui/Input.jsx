@@ -14,13 +14,24 @@ export default function Input({
   touched,
   maxLength,
   disabled,
+  required = false,
+  badge = "",
+  wrapperClassName = "",
+  labelClassName = "",
+  inputClassName = "",
 }) {
   const hasError = error && touched;
 
   return (
-    <div className="mb-2 md-mb-4">
-      <label className="block mb-1.5 text-sm text-text font-semibold">
+    <div className={`mb-2 ${wrapperClassName}`}>
+      <label className={`flex items-center mb-1.5 text-sm font-semibold ${labelClassName || "text-text"}`}>
         {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+        {badge && (
+          <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-medium">
+            {badge}
+          </span>
+        )}
       </label>
       <div className="relative">
         {leftIcon && (
@@ -37,9 +48,6 @@ export default function Input({
           onBlur={onBlur}
           maxLength={maxLength}
           disabled={disabled}
-          //  style={{
-          //     width: `${Math.max(value?.length || 0, placeholder?.length || 0, 5)}ch`,
-          //   }}
           className={`
             w-full h-12 pr-4
             ${leftIcon ? "pl-12" : "pl-4"}
@@ -48,7 +56,7 @@ export default function Input({
             focus:outline-none focus:ring-2
             ${hasError
               ? "border-red-400 bg-red-50 focus:border-red-400 focus:ring-red-200"
-              : "border-gray-300 focus:border-primary focus:ring-primary/20"
+              : `${inputClassName || "border-gray-300"} focus:border-primary focus:ring-primary/20`
             }
           `}
         />
@@ -59,7 +67,7 @@ export default function Input({
         )}
       </div>
 
-      <div className="min-h-4">
+      <div>
         <FieldError error={error} touched={touched} />
       </div>
     </div>

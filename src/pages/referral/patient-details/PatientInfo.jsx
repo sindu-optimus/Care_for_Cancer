@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Table from "../../components/ui/Table";
 
-import { getReferralsByPatientId } from "../../services/referralService";
+import { getReferrals } from "../../../services/referralService";
 
 import { FaArrowLeft } from "react-icons/fa";
 
 export default function PatientDetails() {
 
-    const [referralData, setReferralData] = useState([]);
+    const [activeTab, setActiveTab] = useState("patient");
+
+    const [referral, setReferral] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -23,22 +24,24 @@ export default function PatientDetails() {
             try {
                 setLoading(true);
 
-                const response = await getReferralsByPatientId(patient.id);
+                const response = await getReferrals({
+                    patientId: patient.id,
+                });
+                const referral = response.data?.[0];
 
-                const formattedData = response.data.map((referral) => ({
+            if (referral) {
+                setReferral({
                     ...referral,
-                    referralReceivedDate: new Date(
-                        referral.referralReceivedDate
-                    ).toLocaleString("en-GB"),
-                    appointmentDate: new Date(
-                        referral.appointmentDate
-                    ).toLocaleString("en-GB"),
-                    systemCreatedDateTime: new Date(
-                        referral.systemCreatedDateTime
-                    ).toLocaleString("en-GB"),
-                    }));
-
-                setReferralData(formattedData);
+                    referralReceivedDate: referral.referralReceivedDate
+                        ? new Date(referral.referralReceivedDate).toLocaleString("en-GB")
+                        : "-",
+                    appointmentDate: referral.appointmentDate
+                        ? new Date(referral.appointmentDate).toLocaleString("en-GB")
+                        : "-",
+                });
+            } else {
+                setReferral(null);
+            }
             } catch (error) {
                 console.error("Error fetching referrals:", error);
             } finally {
@@ -48,41 +51,6 @@ export default function PatientDetails() {
 
         fetchReferrals();
     }, [patient?.id]);
-
-    const referralColumns = [
-    {
-        key: "cancerType",
-        label: "Cancer Type",
-    },
-    {
-        key: "priorityDescription",
-        label: "Priority",
-    },
-    {
-        key: "pathwayUbrnId",
-        label: "Pathway UBRN",
-    },
-    // {
-    //     key: "appointmentDate",
-    //     label: "Appointment Date",
-    // },
-    // {
-    //     key: "appointmentStatus",
-    //     label: "Appointment Status",
-    // },
-    {
-        key: "appointmentClinicianName",
-        label: "Appointment Clinician",
-    },
-    {
-        key: "referralClinician",
-        label: "Referral Clinician",
-    },
-    {
-        key: "referralReceivedDate",
-        label: "Referral Received Date",
-    },
-    ];
 
     if (!patient) {
         return (
@@ -94,13 +62,13 @@ export default function PatientDetails() {
 
     return (
         <main className="flex-1">
-            <div
+            {/* <div
                 className="flex items-center gap-2 mb-6 cursor-pointer text-primary font-medium"
                 onClick={() => navigate(-1)}
             >
                 <FaArrowLeft />
                 <span>Back to Search Patient</span>
-            </div>
+            </div> */}
 
             <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
                 {/* <h2 className="font-heading font-bold text-xl text-text mb-6">
@@ -200,28 +168,76 @@ export default function PatientDetails() {
                     {patient.demographics?.maritalStatus || "-"}
                     </div>
                 </div>
-                </div>
-            <div className="bg-white mt-6 sm:mt-10 rounded-2xl shadow-md overflow-hidden">
-                <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
-                    <h2 className="font-heading font-bold text-xl text-text">
-                        Referrals
-                    </h2>
-                </div>
-                <Table
-                    columns={referralColumns}
-                    data={referralData}
-                    onRowClick={(row) => {
-                        navigate(
-                        `/search-patient/${patient.id}/referrals/${row.id}`,
-                        {
-                            state: {
-                            patient,
-                            referral: row,
-                            },
-                        }
-                        );
-                    }}
-                />
+            </div>
+            <div className="bg-white mt-6 sm:mt-10 rounded-2xl shadow-md p-6">
+                <h2 className="font-heading font-bold text-xl text-text mb-6">
+                    Referral Details
+                </h2>
+
+                {loading ? (
+                    <p>Loading...</p>
+                ) : !referral ? (
+                    <p className="text-gray-500">No referral found.</p>
+                ) : (
+                    <>
+                        <h3 className="text-primary p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mb-5">
+                            Referral Information
+                        </h3>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                            <div>
+                                <strong>Referral Clinician:</strong>{" "}
+                                {referral.referralClinician || "-"}
+                            </div>
+
+                            <div>
+                                <strong>Cancer Type:</strong>{" "}
+                                {referral.cancerType || "-"}
+                            </div>
+
+                            <div>
+                                <strong>Speciality:</strong>{" "}
+                                {referral.specialityDescription || "-"}
+                            </div>
+
+                            <div>
+                                <strong>Priority:</strong>{" "}
+                                {referral.priorityDescription || "-"}
+                            </div>
+
+                            <div>
+                                <strong>Pathway UBRN ID:</strong>{" "}
+                                {referral.pathwayUbrnId || "-"}
+                            </div>
+
+                            <div>
+                                <strong>Referral Received Date:</strong>{" "}
+                                {referral.referralReceivedDate || "-"}
+                            </div>
+                        </div>
+
+                        <h3 className="text-primary p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mt-8 mb-5">
+                            Appointment Information
+                        </h3>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                            <div>
+                                <strong>Appointment Date:</strong>{" "}
+                                {referral.appointmentDate || "-"}
+                            </div>
+
+                            <div>
+                                <strong>Appointment Status:</strong>{" "}
+                                {referral.appointmentStatus || "-"}
+                            </div>
+
+                            <div>
+                                <strong>Appointment Clinician:</strong>{" "}
+                                {referral.appointmentClinicianName || "-"}
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
         </main>
     );
