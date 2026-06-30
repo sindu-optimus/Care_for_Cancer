@@ -47,11 +47,21 @@ export default function useForm(initialValues, validate) {
   };
 
   const setFieldValue = (name, value) => {
-    const newValues = { ...values, [name]: value };
-    setValues(newValues);
-    setTouched((prev) => ({ ...prev, [name]: true }));
-    const newErrors = validate(newValues);
-    setErrors(newErrors);
+    setValues((prev) => {
+      const newValues = {
+        ...prev,
+        [name]: value,
+      };
+
+      setErrors(validate(newValues));
+
+      return newValues;
+    });
+
+    setTouched((prev) => ({
+      ...prev,
+      [name]: true,
+    }));
   };
 
   return { values, errors, touched, handleChange, handleBlur, handleSubmit, resetForm, prefillForm, setFieldValue };

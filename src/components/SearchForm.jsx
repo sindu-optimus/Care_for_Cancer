@@ -131,7 +131,7 @@ export default function SearchForm({ onResults }) {
 
   return (
     <>
-      <div className="bg-white mt-10 rounded-2xl shadow-md p-4 md:p-8">
+      <div className="bg-white mt-10 rounded-2xl shadow-md p-4 md:p-6">
         <h3 className="text-primary p-2 bg-[#EAF0FB] font-semibold text-sm uppercase tracking-wide border-l-4 border-primary pl-3 mb-5">
           Search Patient
         </h3>
@@ -229,7 +229,7 @@ export default function SearchForm({ onResults }) {
               />
     
               <div>
-                <label className="block font-medium text-text mb-2">
+                <label className="block text-sm font-medium text-text mb-2">
                   Gender
                 </label>
 

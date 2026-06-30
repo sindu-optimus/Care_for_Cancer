@@ -1,30 +1,23 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Button from "../../components/ui/Button";
 import Table from "../../components/ui/Table";
-import { getPatientInvestigationMDT } from "../../services/investigationService";
 
 export default function Dashboard() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [patient] = useState({
+    nhsNumber: "1234567890",
+    mrn: "MRN001",
+    demographics: {
+      title: "Mr",
+      firstname: "John",
+      surname: "Smith",
+      dob: "1985-05-20",
+      gender: "Male",
+    },
+  });
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  const [isSelectPatientOpen, setIsSelectPatientOpen] = useState(false);
 
-  const fetchDashboardData = async () => {
-    try {
-      const response = await getPatientInvestigationMDT();
-      setData(response.data || []);
-    } catch (error) {
-      console.error("Failed to load dashboard data", error);
-      setData([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const columns = [
+  const dashboardColumns = [
     {
       key: "mdtType",
       label: "MDT Type",
@@ -32,59 +25,89 @@ export default function Dashboard() {
     {
       key: "meetingDateTime",
       label: "Meeting Date & Time",
-      render: (row) =>
-        row.meetingDateTime
-          ? new Date(row.meetingDateTime).toLocaleString("en-GB")
-          : "-",
     },
     {
-      key: "patientName",
-      label: "Name",
-      render: (row) =>
-        `${row.patientFirstname || ""} ${row.patientSurname || ""}`.trim(),
+      key: "investigationCatalogues",
+      label: "Investigation Catalogues",
     },
     {
-      key: "patientNhsNumber",
-      label: "NHS Number",
+      key: "result",
+      label: "Result",
     },
     {
-      key: "clinicalNotes",
-      label: "Clinical Notes",
+      key: "referral",
+      label: "Referral",
+    },
+  ];
+
+  const dashboardData = [
+    {
+      id: 1,
+      mdtType: "Lung MDT",
+      meetingDateTime: "25/06/2026 10:30 AM",
+      investigationCatalogues: "CT Scan, MRI Brain",
+      result: "Result is still pending",
+      referral: "Oncology (Urgent)",
     },
   ];
 
   return (
-    <div className="flex min-h-full bg-[#EAF0FB]">
-      <div className="flex flex-col flex-1">
-        <h2 className="text-2xl sm:text-3xl font-bold text-text mb-6">
-          Dashboard
-        </h2>
+    <div className="min-h-full bg-[#EAF0FB] p-6">
+      {/* Patient Details */}
+      <div className="flex items-start gap-4 mb-6">
+        <div className="flex-1 bg-white rounded-2xl shadow-md p-4">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+            <span>
+              <strong>NHS:</strong> {patient.nhsNumber}
+            </span>
 
-        <div className="bg-white rounded-2xl shadow-md">
-          {/* <div className="px-4 sm:px-6 py-5 border-b border-gray-100">
-            <h2 className="font-heading font-bold text-xl text-text">
-              Patients Added to This Meeting
-            </h2>
-          </div> */}
+            <span>
+              <strong>MRN:</strong> {patient.mrn}
+            </span>
 
-          {loading ? (
-            <div className="p-6 text-center">Loading...</div>
-          ) : data.length === 0 ? (
-            <div className="p-6 text-center text-gray-500">
-              No data found
-            </div>
-          ) : (
-            <Table
-              columns={columns}
-              data={data}
-              onRowClick={(row) => {
-                navigate(`/mdt/dashboard/investigations/${row.id}`, {
-                  state: { investigation: row },
-                });
-              }}
-            />
-          )}
+            <span>
+              <strong>Name:</strong>{" "}
+              {[
+                patient.demographics.title,
+                patient.demographics.firstname,
+                patient.demographics.surname,
+              ].join(" ")}
+            </span>
+
+            <span>
+              <strong>DOB:</strong>{" "}
+              {new Date(patient.demographics.dob).toLocaleDateString("en-GB")}
+            </span>
+
+            <span>
+              <strong>Gender:</strong> {patient.demographics.gender}
+            </span>
+          </div>
         </div>
+
+        <Button
+          className="h-10 px-6 whitespace-nowrap"
+          onClick={() => setIsSelectPatientOpen(true)}
+        >
+          Select Patient
+        </Button>
+      </div>
+
+      {/* Dashboard Table */}
+      <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+        {/* <div className="px-6 py-4">
+          <h2 className="font-heading font-bold text-xl text-text">
+            Meeting Details
+          </h2>
+        </div> */}
+
+        <Table
+          columns={dashboardColumns}
+          data={dashboardData}
+          onRowClick={(row) => {
+            console.log("Row clicked:", row);
+          }}
+        />
       </div>
     </div>
   );

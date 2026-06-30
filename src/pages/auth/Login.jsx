@@ -47,7 +47,7 @@ export default function Login() {
       localStorage.setItem("tokenExpiry", Date.now() + response.data.expiresInSeconds * 1000);
 
       login(response.data.user); 
-      navigate("/patient/search-patient");
+      navigate("/referral/search-patient");
 
     } catch (error) {
       if (error.response?.status === 401) {

@@ -3,6 +3,7 @@ import { FaChevronDown } from "react-icons/fa";
 import FieldError from "./FieldError";
 
 export default function Select({
+  label,
   name,
   value,
   onChange,
@@ -11,6 +12,9 @@ export default function Select({
   error,
   touched,
   dropdownMode = "inline",
+  required = false,
+  labelClassName = "",
+  triggerClassName = "",
 }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -36,6 +40,12 @@ export default function Select({
 
   return (
     <div className="relative w-full" ref={dropdownRef}>
+      {label && (
+        <label className={`block mb-2 text-sm font-semibold ${labelClassName || "text-text"}`}>
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </label>
+      )}
       {/* Trigger */}
       <div
         onClick={() => setOpen((prev) => !prev)}
@@ -43,7 +53,7 @@ export default function Select({
           ${
             hasError
               ? "border border-red-400 bg-red-50"
-              : "border border-gray-300 bg-white"
+              : `border bg-white ${triggerClassName || "border-gray-300"}`
           }`}
       >
         <span className={selectedLabel ? "text-slate-700" : "text-gray-500"}>

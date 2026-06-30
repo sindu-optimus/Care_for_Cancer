@@ -16,6 +16,9 @@ export default function DateTimePicker({
   showTime = false,
   minDate = null,
   maxDate = null,
+  required = false,
+  labelClassName = "",
+  triggerClassName = "",
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const pickerRef = useRef(null);
@@ -78,9 +81,10 @@ export default function DateTimePicker({
   };
 
   return (
-    <div className="mb-4" ref={pickerRef}>
-      <label className="block mb-1.5 text-sm text-text font-semibold">
+    <div ref={pickerRef}>
+      <label className={`block mb-1.5 text-sm font-semibold ${labelClassName || "text-text"}`}>
         {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
       </label>
 
       <div className="relative cursor-pointer">
@@ -94,7 +98,7 @@ export default function DateTimePicker({
             ${
               error && touched
                 ? "border-red-400 bg-red-50"
-                : "border-gray-300"
+                : `${triggerClassName || "border-gray-300"}`
             }
           `}
         >
@@ -122,7 +126,7 @@ export default function DateTimePicker({
         )}
       </div>
       
-      <div className="min-h-4">
+      <div>
         <FieldError
           error={error}
           touched={touched}
